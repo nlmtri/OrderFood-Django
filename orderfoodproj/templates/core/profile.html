@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Hồ sơ cá nhân {% endblock title %}
+
+{% block content %}
+
+<div style="min-height: 100vh;background-color: #F5F5F5;" class="w-100">
+    <div class="container pt-3" style="background-color: #FFFFFF;min-height: 100vh;">
+        <div class="d-flex align-items-center justify-content-between">
+            <div>
+                <h3 class="fs-3">Hồ sơ cá nhân</h3>
+                <h4 class="fs-5">Cần cập nhật đầy đủ thông tin cá nhân để thanh toán</h4>
+            </div>
+            <a href="{% url 'index' %}" class="nav-link">
+                <i class="fa-solid fa-house fs-5"></i>
+            </a>
+        </div>
+        <hr class="text-dark">
+        <div class="d-flex align-items-start justify-content-between" style="gap: 1%;">
+            <div class="left-profile mt-3" style="width: 74%;">
+                <div class="w-100 d-flex align-items-start justify-content-start mb-3" style="gap: 2%;">
+                    <div style="width: 24%;">
+                        <label for="" class="form-label w-100" style="text-align: right !important;">
+                            Tên tài khoản
+                        </label>
+                    </div>
+                    <div style="width: 60%;">
+                        <input type="text" class="form-control" style="border-radius: 0;" value="admin">
+                        <div id="emailHelp" class="form-text">Tên tài khoản chỉ được thay đổi 1 lần</div>
+                    </div>
+                </div>
+
+                <div class="w-100 d-flex align-items-center justify-content-start mb-3" style="gap: 2%;">
+                    <div style="width: 24%;">
+                        <label for="" class="form-label w-100" style="text-align: right !important;">
+                            Họ và tên
+                        </label>
+                    </div>
+                    <div style="width: 60%;">
+                        <input type="text" class="form-control" style="border-radius: 0;" value="Nguyễn Văn Long">
+                    </div>
+                </div>
+
+                <div class="w-100 d-flex align-items-center justify-content-start mb-3" style="gap: 2%;">
+                    <div style="width: 24%;">
+                        <label for="" class="form-label w-100" style="text-align: right !important;">
+                            Email
+                        </label>
+                    </div>
+                    <div style="width: 60%;">
+                        <input type="text" class="form-control" style="border-radius: 0;" value="test@gmail.com">
+                    </div>
+                </div>
+
+                <div class="w-100 d-flex align-items-center justify-content-start mb-3" style="gap: 2%;">
+                    <div style="width: 24%;">
+                        <label for="" class="form-label w-100" style="text-align: right !important;">
+                            Số điện thoại
+                        </label>
+                    </div>
+                    <div style="width: 60%;">
+                        <input type="text" class="form-control" style="border-radius: 0;" value="0239234566">
+                    </div>
+                </div>
+
+                <div class="w-100 d-flex align-items-center justify-content-start mb-3" style="gap: 2%;">
+                    <div style="width: 24%;">
+                        <label for="" class="form-label w-100" style="text-align: right !important;">
+                            Địa chỉ
+                        </label>
+                    </div>
+                    <div style="width: 60%;">
+                        <input type="text" class="form-control" style="border-radius: 0;" value="Hoàng Quốc Việt, Cầu Giấy, Hà Nội">
+                    </div>
+                </div>
+
+                <div class="w-100 d-flex align-items-center justify-content-start mb-3" style="gap: 2%;">
+                    <div style="width: 24%;">
+                        <label for="" class="form-label w-100" style="text-align: right !important;">
+                            Ngày sinh
+                        </label>
+                    </div>
+                    <div style="width: 60%;">
+                        <input type="date" class="form-control" style="border-radius: 0;">
+                    </div>
+                </div>
+
+                <div class="w-100 d-flex align-items-start justify-content-start mb-3" style="gap: 2%;">
+                    <div style="width: 24%;">
+                        <label for="" class="form-label w-100" style="text-align: right !important;">
+                            Giới tính
+                        </label>
+                    </div>
+                    <div style="width: 60%;">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                            <label class="form-check-label" for="flexRadioDefault1">
+                              Nam
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+                            <label class="form-check-label" for="flexRadioDefault2">
+                              Nữ
+                            </label>
+                          </div>
+                    </div>
+                </div>
+
+                <div class="w-100 d-flex align-items-center justify-content-start mb-3" style="gap: 2%;">
+                    <div style="width: 24%;">
+                        <label for="" class="form-label w-100" style="text-align: right !important;">
+                            Tỉnh, thành phố
+                        </label>
+                    </div>
+                    <div style="width: 60%;">
+                        <select class="form-select" aria-label="Default select example">
+                            <option selected>Hà Nội</option>
+                            <option value="1">TP. Hồ Chí Minh</option>
+                            <option value="2">Hải Phòng</option>
+                            <option value="3">Đà Nẵng</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="w-100 d-flex align-items-center justify-content-start mb-3" style="gap: 2%;">
+                    <div style="width: 24%;visibility: hidden;">
+                    </div>
+                    <div style="width: 60%;">
+                        <div class="btn btn-success" style="border-radius: 0;">Lưu thông tin</div>
+                    </div>
+                </div>
+                
+                
+                
+            </div>
+            <div class="right-profile mt-3 d-flex flex-column align-items-center" style="width: 25%;">
+                <img class="w-75 h-75 rounded-circle" src="/media/default/user.png" alt="">
+                <input type="file" class="form-control mt-3">
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

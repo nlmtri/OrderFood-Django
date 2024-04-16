@@ -1,0 +1,198 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block title %} {{restaurant.name}} {% endblock title %}
+
+{% block style %}
+
+<link rel="stylesheet" href="{% static 'assets/css/index.css' %}">
+
+{% endblock style %}
+
+{% block content %}
+
+<div class="container-fluid pt-5" style="background-color: #D9F2EE;">
+
+    <!-- Nav -->
+    <nav id="navbar" class="navbar navbar-expand-lg pt-2">
+        <div class="container-fluid">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse d-sm-none" style="padding-left: 48px;" id="navbarSupportedContent">
+              <form class="search" action="{% url 'index' %}">
+                <input type="text" placeholder="Bạn muốn ăn gì?" name="q" value="{% if query != 'None' %}{{query}}{% endif %}">
+                <button class="search-btn">Tìm kiếm</button>
+              </form>
+          </div>
+
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <span class="cart-counter">4</span>
+              <a class="nav-link cart" href="#"><ion-icon name="cart-outline"></ion-icon></a>
+            </li>
+            
+            {% if request.user.is_authenticated %}
+            <li class="nav-item dropdown" style="margin-left: 24px;padding-right: 48px;">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                {{request.user.username}}
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Đơn hàng</a></li>
+                <li><a class="dropdown-item" href="#">Ví</a></li>
+                <li><a class="dropdown-item" href="#">Thông báo <span class="badge text-bg-secondary">4</span></a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#">Cài đặt</a></li>
+                <li><a class="dropdown-item" href="{% url 'logout-view' %}">Đăng xuất</a></li>
+              </ul>
+            </li>
+            {% else %}
+            <li class="nav-item" style="padding-right: 48px;">
+                <a class="nav-link user" href="{% url 'get-login-view' %}"><ion-icon name="person-outline"></ion-icon></a>
+            </li>
+            {% endif %}
+
+          </ul>
+        </div>
+    </nav>
+
+    <div style="margin: 1rem 3em 0;gap: 0 1.5rem;" class="d-flex align-items-center justify-content-start">
+        <a href="{% url 'index' %}" class="nav-link fs-4">Trang chủ</a>
+        <i class="fa-solid fa-chevron-right fs-6"></i>
+        <a href="#" class="nav-link fs-4">Nhà hàng</a>
+        <i class="fa-solid fa-chevron-right fs-6"></i>
+        <a href="#" class="nav-link fs-4">{{restaurant.name}}</a>
+    </div>
+
+    <div style="margin: 0 3em 0;" class="d-flex align-items-center justify-content-between">
+        <div style="width: max-content;">
+            <h3 class="fs-1">{{restaurant.name}}</h3>
+            <p class="card-text d-flex align-items-center justify-content-between w-50">
+                <span>⭐ 4.2</span>
+                <span>🕔 20 phút</span>
+                <span>2.2 km</span>
+            </p>
+            <p class="card-text">
+                <b>Giờ mở cửa</b> Hôm nay 00:00 - 23:59
+            </p>
+        </div>
+        <img src="{{restaurant.logo.url}}" class="img-thumbnail rounded-circle" width="200" height="200" alt="Logo {{restaurant.name}}">
+    </div>
+
+    <div style="margin: 1rem 3em 0;">
+        <img src="{{restaurant.banner.url}}" alt="Banner {{restaurant.name}}" style="height: 400px;width: 100%;object-fit: cover;object-position: center;border-radius: 6px;">
+    </div>
+
+    {% for menu_name, dishes in menu_dict.items %}
+    <div class="food-menus mt-5 mb-5">
+        <h3 class="fs-1 fw-bolder">{{menu_name}}</h3>
+        <div class="food-list">
+            {% for dish in dishes %}
+            <div class="card food-card food-item">
+                <img src="{{dish.image.url}}" class="card-img-top" style="width: 100%;height: 10rem;object-fit: cover;object-position: center;" alt="{{dish.name}}">
+                <div class="card-body">
+                  <h5 class="card-title">{{dish.name|truncatechars:20}}</h5>
+                  <p class="card-text d-flex align-items-center justify-content-between">
+                    <span>⭐ 4.2</span>
+                    <span>🕔 20 phút</span>
+                    <span>{{dish.distance}} km</span>
+                  </p>
+                  <p class="card-text">Giá: {{dish.price|intcomma}} đ</p>
+                  <a href="#" class="btn btn-success" style="border-radius: 50%;">+</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center pt-2 pb-2" style="margin-bottom: 0;">
+            {% if items.has_previous %}
+                <li class="page-item"><a class="page-link" href="?q={{query}}&page=1">1</a></li>
+                <li class="page-item"><a class="page-link" href="?q={{query}}&page={{ items.previous_page_number }}">&laquo;</a></li>
+            {% endif %}
+
+            {% for num in page_range %}
+                <li class="page-item {% if num == items.number %}active{% endif %}"><a class="page-link" href="?q={{query}}&page={{ num }}">{{ num }}</a></li>
+            {% endfor %}
+    
+            {% if items.has_next %}
+                <li class="page-item"><a class="page-link" href="?q={{query}}&page={{ items.next_page_number }}">&raquo;</a></li>
+                <li class="page-item"><a class="page-link" href="?q={{query}}&page={{ items.paginator.num_pages }}">{{ items.paginator.num_pages }}</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+</div>
+<div class="w-100" style="background-color: #BED7DC;padding: 3em 4.5em 0.8em;">
+    <div class="row">
+        <div class="col col-sm-6 col-md-3 col-lg-3 col-xl-3 col-xxl-3">
+            <p class="fw-semibold">Thông tin chung</p>
+            <div class="flex-column">
+                <a href="#" class="nav-link text-primary">Giới thiệu về HK2Food</a>
+                <a href="#" class="nav-link text-primary">Điều khoản sử dụng</a>
+                <a href="#" class="nav-link text-primary">Chính sách bảo mật</a>
+                <a href="#" class="nav-link text-primary">Đăng ký nhà hàng</a>
+                <a href="#" class="nav-link text-primary">Trung tâm trợ giúp</a>
+                <a href="#" class="nav-link text-primary">Câu hỏi thường gặp</a>
+            </div>
+        </div>
+        <div class="col col-sm-6 col-md-3 col-lg-3 col-xl-3 col-xxl-3">
+            <p class="fw-semibold">Chi nhánh</p>
+            
+            <a href="#" class="nav-link text-primary fs-6">Hà Nội</a>
+            <a href="#" class="nav-link text-primary fs-6">TP. Hồ Chí Minh</a>
+            <a href="#" class="nav-link text-primary fs-6">Cần Thơ</a>
+            <a href="#" class="nav-link text-primary fs-6">Đà Nẵng</a>
+            
+        </div>
+        <div class="col col-sm-6 col-md-3 col-lg-3 col-xl-3 col-xxl-3">
+            <p class="fw-semibold">Thực đơn</p>
+            <a href="#" class="nav-link fs-6">Đồ ăn nhanh</a>
+            <a href="#" class="nav-link fs-6">Đồ uống</a>
+            <a href="#" class="nav-link fs-6">Kem</a>
+            <a href="#" class="nav-link fs-6">Cà phê</a>
+            <a href="#" class="nav-link fs-6">Hải sản</a>
+            <a href="#" class="nav-link fs-6">Đồ chay</a>
+
+            <!-- <button type="button" class="btn btn-dark text-white mb-1 d-flex align-items-center justify-content-center" style="width: 40px;height: 40px;"><i class="fa-brands fa-apple"></i></button><br>
+            <button type="button" class="btn btn-dark text-white d-flex align-items-center justify-content-center" style="width: 40px;height: 40px;"><i class="fa-brands fa-android"></i></button><br> -->
+        </div>
+        <div class="col col-sm-6 col-md-3 col-lg-3 col-xl-3 col-xxl-3">
+            <p class="fw-semibold">Thông tin liên hệ</p>
+            <p class="text-start" style="margin-bottom: 0;">Công Ty Cổ Phần HK2Food</p>
+            <p class="text-start" style="margin-bottom: 0;">Lầu G, Tòa nhà Jabes 1,</p>
+            <p class="text-start" style="margin-bottom: 0;">số 244 đường Cống Quỳnh, phường Phạm Ngũ Lão, Quận 1, TPHCM</p>
+            <p class="text-start" style="margin-bottom: 0;">Giấy CN ĐKDN số: 0311828036</p>
+            <p class="text-start" style="margin-bottom: 0;">do Sở Kế hoạch và Đầu tư TP.HCM cấp ngày 11/6/2012,</p>
+            <p class="text-start" style="margin-bottom: 0;">sửa đổi lần thứ 23, ngày 10/12/2020</p>
+            <p class="text-start" style="margin-bottom: 0;">Chịu trách nhiệm quản lý nội dung: Nguyễn Văn Long</p>
+            <p class="text-start" style="margin-bottom: 0;">Điện thoại liên hệ: 023 5434 534</p>
+            <p class="text-start" style="margin-bottom: 0;">Email: <span class="text-primary">rin2@gmail.com</span></p>
+
+        </div>
+    </div>
+    <p class="text-center" style="padding-top: 0.8em;margin-bottom: 0;">Copyright ©️ 2024</p>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        let navbar = document.getElementById('navbar');
+        let scrollPosition = window.scrollY;
+
+        function onScroll() {
+            let currentPosition = window.scrollY;
+            if (currentPosition > scrollPosition) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+            scrollPosition = currentPosition;
+        }
+
+        window.addEventListener('scroll', onScroll);
+    });
+</script>
+
+{% endblock content %}

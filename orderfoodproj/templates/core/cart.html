@@ -1,0 +1,217 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Đặt đồ ăn {% endblock title %}
+
+{% block style %}
+
+<link rel="stylesheet" href="{% static 'assets/css/index.css' %}">
+
+{% endblock style %}
+
+{% block content %}
+
+<div class="container-fluid pt-5" style="background-color: #D9F2EE;min-height: 100vh;">
+
+    <!-- Nav -->
+    <nav id="navbar" class="navbar navbar-expand-lg pt-2">
+        <div class="container-fluid">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse d-sm-none" style="padding-left: 48px;" id="navbarSupportedContent">
+              <form class="search" method="GET" action="{% url 'index' %}">
+                <input type="text" placeholder="Bạn muốn ăn gì?" name="q" value="{% if query != 'None' %}{{query}}{% else %}''{% endif %}">
+                <button class="search-btn">Tìm kiếm</button>
+              </form>
+          </div>
+
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <span class="cart-counter">3</span>
+              <a id="cart" class="nav-link cart" href="{% url 'cart-detail-view' %}"><ion-icon name="cart-outline"></ion-icon></a>
+            </li>
+            
+            {% if request.user.is_authenticated %}
+            <li class="nav-item dropdown" style="margin-left: 24px;padding-right: 48px;">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                {{request.user.username}}
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Đơn hàng</a></li>
+                <li><a class="dropdown-item" href="#">Ví</a></li>
+                <li><a class="dropdown-item" href="#">Thông báo <span class="badge text-bg-secondary">4</span></a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#">Cài đặt</a></li>
+                <li><a class="dropdown-item" href="{% url 'logout-view' %}">Đăng xuất</a></li>
+              </ul>
+            </li>
+            {% else %}
+            <li class="nav-item" style="padding-right: 48px;">
+                <a class="nav-link user" href="{% url 'get-login-view' %}"><ion-icon name="person-outline"></ion-icon></a>
+            </li>
+            {% endif %}
+
+          </ul>
+        </div>
+    </nav>
+
+    {% if messages %}
+
+        {% for message in messages %}
+        <div {% if message.tags %} class="alert-{{ message.tags }} alert alert-dismissible mt-1 mb-1"{% endif %} role="alert">
+            <div>{{ message }}</div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    
+    {% endif %}
+    <div style="margin: 1rem 3em 0;gap: 1%;" class="d-flex">
+        <div class="left pt-2" style="width: 74%;">
+            
+            <h3 class="fs-2 fw-semibold">Danh sách món ăn</h3>
+            <div class="w-100">
+                <hr class="divider" style="margin: 1rem 0 1rem;width: 100%;" />
+                <div class="row mt-1 p-2">
+                    <div class="col col-2">
+                        <img src="{% static 'assets/images/wine.jpg' %}" style="width: 150px;height: 150px;border-radius: 6px;object-fit: cover;object-position: center;" alt="wine">
+                    </div>
+                    <div class="col col-2 d-flex align-items-center">
+                        <p>Trà Ổi Hồng 700ML</p>
+                    </div>
+                    <div class="col col-1 d-flex align-items-center"">
+                        <input type="number" min="1" value="1" max="100" step="1" class="form-control">
+                    </div>
+                    <div class="col col-2 d-flex align-items-center"">
+                        <p>100,000 đ</p>
+                    </div>
+                    <div class="col col-4">
+                            <label for="exampleFormControlTextarea1" class="form-label">Ghi chú</label>
+                            <textarea style="resize: none;" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                    </div>
+                    <div class="col col-1 d-flex align-items-center"">
+                        <i class="fa-solid fa-trash fs-5"></i>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="w-100">
+                <hr class="divider" style="margin: 1rem 0 1rem;width: 100%;" />
+                <div class="row mt-1 p-2">
+                    <div class="col col-2">
+                        <img src="{% static 'assets/images/seafood.jpg' %}" style="width: 150px;height: 150px;border-radius: 6px;object-fit: cover;object-position: center;" alt="wine">
+                    </div>
+                    <div class="col col-2 d-flex align-items-center">
+                        <p>Ốc Hương Trang</p>
+                    </div>
+                    <div class="col col-1 d-flex align-items-center"">
+                        <input type="number" min="1" value="1" max="100" step="1" class="form-control">
+                    </div>
+                    <div class="col col-2 d-flex align-items-center"">
+                        <p>100,000 đ</p>
+                    </div>
+                    <div class="col col-4">
+                            <label for="exampleFormControlTextarea1" class="form-label">Ghi chú</label>
+                            <textarea style="resize: none;" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                    </div>
+                    <div class="col col-1 d-flex align-items-center"">
+                        <i class="fa-solid fa-trash fs-5"></i>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="w-100">
+                <hr class="divider" style="margin: 1rem 0 1rem;width: 100%;" />
+                <div class="row mt-1 p-2">
+                    <div class="col col-2">
+                        <img src="{% static 'assets/images/steak.jpg' %}" style="width: 150px;height: 150px;border-radius: 6px;object-fit: cover;object-position: center;" alt="wine">
+                    </div>
+                    <div class="col col-2 d-flex align-items-center">
+                        <p>Big Beef Burger</p>
+                    </div>
+                    <div class="col col-1 d-flex align-items-center"">
+                        <input type="number" min="1" value="1" max="100" step="1" class="form-control">
+                    </div>
+                    <div class="col col-2 d-flex align-items-center"">
+                        <p>100,000 đ</p>
+                    </div>
+                    <div class="col col-4">
+                            <label for="exampleFormControlTextarea1" class="form-label">Ghi chú</label>
+                            <textarea style="resize: none;" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                    </div>
+                    <div class="col col-1 d-flex align-items-center"">
+                        <i class="fa-solid fa-trash fs-5"></i>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="right pt-2" style="width: 25%;background-color: #DDDDDD;border-radius: 6px;">
+            <h3 class="fs-2 fw-semibold" style="padding: 0 5%;">Bills</h3>
+            <hr class="divider" style="margin: 1rem auto 1rem;width: 90%;" />
+            <div style="width: 90%;">
+                <p class="d-flex align-items-center justify-content-between" style="padding: 0 5%;">
+                    <b>Số lượng: 3</b> 
+                    <strong>300,000 đ</strong>
+                </p>
+                <div style="padding: 0 5%;">
+                    <h4 class="fs-5">Shipping</h4>
+                    <select class="form-select" aria-label="Default select example">
+                        <option selected>Giao nhanh</option>
+                    </select>
+                </div>
+                <div style="padding: 0 5%;" class="pt-3">
+                    <h4 class="fs-5">Mã khuyến mãi</h4>
+                    <input type="text" class="form-control">
+                </div>
+                <div style="padding: 0 5%;" class="pt-3">
+                    <h4 class="fs-5">Phương thức thanh toán</h4>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                        <label class="form-check-label" for="flexRadioDefault1">
+                          Thanh toán khi nhận hàng
+                        </label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+                        <label class="form-check-label" for="flexRadioDefault2">
+                          Paypal
+                        </label>
+                      </div>
+                </div>
+            </div>
+            <hr class="divider" style="margin: 1rem auto 1rem;width: 90%;" />
+            <div style="padding: 0 5%;">
+                <p class="d-flex align-items-center justify-content-between">
+                    <b>Tổng tiền</b>
+                    <strong>300,000 đ</strong>
+                </p>
+                <button class="btn btn-dark w-100" style="border-radius: 0;">Đặt hàng</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        let navbar = document.getElementById('navbar');
+        let scrollPosition = window.scrollY;
+
+        function onScroll() {
+            let currentPosition = window.scrollY;
+            if (currentPosition > scrollPosition) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+            scrollPosition = currentPosition;
+        }
+
+        window.addEventListener('scroll', onScroll);
+    });
+</script>
+
+{% endblock content %}

@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Hồ sơ nhà hàng {% endblock title %}
+
+{% block content %}
+
+<div style="min-height: 100vh;background-color: #F5F5F5;" class="w-100">
+    <div class="container pt-3" style="background-color: #FFFFFF;min-height: 100vh;">
+        <div class="d-flex align-items-center justify-content-between">
+            <div>
+                <h3 class="fs-3">Thông tin nhà hàng</h3>
+                <h4 class="fs-5">Cần cập nhật đầy đủ thông tin về nhà hàng</h4>
+            </div>
+            <a href="{% url 'restaurant-admin-view' %}" class="nav-link">
+                <i class="fa-solid fa-house fs-5"></i>
+            </a>
+        </div>
+        
+        {% if messages %}
+
+        {% for message in messages %}
+        <div {% if message.tags %} class="alert-{{ message.tags }} alert alert-dismissible mt-1 mb-1"{% endif %} role="alert">
+            <div>{{ message }}</div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    
+        {% endif %}
+
+        <hr class="text-dark">
+        <form action="{% url 'save-restaurant-admin-profile-view' restaurant.slug %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="w-100 p-2" style="border-radius: 6px;">
+            <img src="{{restaurant.banner.url}}" alt="Banner" style="width: 100%;height: 500px;object-fit: cover;object-position: center;">
+            <div class="w-25">
+                <input type="file" name="banner" class="form-control mt-3">
+            </div>
+        </div>
+        <div class="d-flex align-items-start justify-content-between mb-3" style="gap: 1%;">
+            <div class="left-profile mt-3" style="width: 74%;">
+                
+                <div class="w-100 d-flex align-items-start justify-content-start mb-3" style="gap: 2%;">
+                    <div style="width: 24%;">
+                        <label for="" class="form-label w-100" style="text-align: right !important;">
+                            Tên nhà hàng
+                        </label>
+                    </div>
+                    <div style="width: 60%;">
+                        <input type="text" name="rest-name" class="form-control" style="border-radius: 0;" value="{{restaurant.name}}">
+                    </div>
+                </div>
+
+                <div class="w-100 d-flex align-items-start justify-content-start mb-3" style="gap: 2%;">
+                    <div style="width: 24%;">
+                        <label for="" class="form-label w-100" style="text-align: right !important;">
+                            Địa chỉ
+                        </label>
+                    </div>
+                    <div style="width: 60%;">
+                        <textarea name="address" class="form-control" id="exampleFormControlTextarea1" rows="3" style="border-radius: 0;resize: none;" >{{restaurant.address}}</textarea>
+                        <!-- <input type="text" class="form-control" style="border-radius: 0;" value="Nguyễn Văn Long"> -->
+                    </div>
+                </div>
+
+                <div class="w-100 d-flex align-items-center justify-content-start mb-3" style="gap: 2%;">
+                    <div style="width: 24%;">
+                        <label for="" class="form-label w-100" style="text-align: right !important;">
+                            Số điện thoại
+                        </label>
+                    </div>
+                    <div style="width: 60%;">
+                        <input type="number" name="phone-number" class="form-control" style="border-radius: 0;" value="{{restaurant.phone_number}}">
+                    </div>
+                </div>
+
+                <div class="w-100 d-flex align-items-center justify-content-start mb-3" style="gap: 2%;">
+                    <div style="width: 24%;">
+                        <label for="" class="form-label w-100" style="text-align: right !important;">
+                            Tỉnh, thành phố
+                        </label>
+                    </div>
+                    <div style="width: 60%;">
+                        <select class="form-select" name="city" aria-label="Default select example">
+                            {% for city in cities %}
+                            <option value="{{city.id}}" {% if restaurant.city.name == city.name %} selected {% endif %}>{{city.name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="w-100 d-flex align-items-center justify-content-start mb-3" style="gap: 2%;">
+                    <div style="width: 24%;visibility: hidden;">
+                    </div>
+                    <div style="width: 60%;">
+                        <button type="submit" class="btn btn-success" style="border-radius: 0;">Lưu thông tin</button>
+                    </div>
+                </div>
+                
+                
+                
+            </div>
+            <div class="right-profile mt-3 d-flex flex-column align-items-center" style="width: 25%;">
+                <img class="w-75 h-75 rounded-circle" src="{{restaurant.logo.url}}" alt="">
+                <input type="file" name="logo" class="form-control mt-3">
+            </div>
+        </div>
+        </form>
+    </div>
+</div>
+
+{% endblock content %}

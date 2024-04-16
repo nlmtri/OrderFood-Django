@@ -1,0 +1,144 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Food App | Đăng ký nhà hàng</title>
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'assets/css/register-provider.css' %}">
+    <script src="{% static 'assets/js/register-provider.js' %}" defer></script>
+</head>
+<body>
+    
+    <form action="{% url 'post-register-provider-view' %}" class="form" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {% if messages %}
+
+        {% for message in messages %}
+        <div {% if message.tags %} class="alert-{{ message.tags }} alert alert-dismissible mt-1 mb-1"{% endif %} role="alert">
+            <div>{{ message }}</div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    
+        {% endif %}
+
+        <h1 class="text-center">Đăng ký nhà hàng</h1>
+
+        <!-- Progressbar -->
+        <div class="progressbar">
+            <div class="progress" id="progress"></div>
+
+            <div class="progress-step active" data-title="Account"></div>
+            <div class="progress-step" data-title="Info"></div>
+            <div class="progress-step" data-title="Contact"></div>
+            <div class="progress-step" data-title="Rest"></div>
+            <div class="progress-step" data-title="Cert"></div>
+        </div>
+
+
+        <!-- Steps -->
+        <div class="form-step active">
+            <div class="input-group">
+                <label for="username">Tên tài khoản</label>
+                <input type="text" name="username" id="username" required maxlength="255">
+            </div>
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" required maxlength="255">
+            </div>
+            <div class="input-group">
+                <label for="password">Mật khẩu</label>
+                <input type="password" name="password" id="password" required maxlength="255">
+            </div>
+            <div class="">
+                <a href="#" class="btn btn-next width-50 ml-auto">Tiếp tục</a>
+                <!-- <a href="#" class="btn btn-previous">Previous</a> -->
+            </div>
+        </div>
+
+        <div class="form-step">
+            <div class="input-group">
+                <label for="fullname">Tên đầy đủ</label>
+                <input type="text" name="fullname" id="fullname" required maxlength="255">
+            </div>
+            
+            <div class="input-group">
+                <label for="dob">Ngày sinh</label>
+                <input type="date" name="dob" id="dob" required>
+            </div>
+
+            <div class="input-group">
+                <label for="id_card">Số CMND/CCCD</label>
+                <input type="number" name="id_card" id="id_card" required maxlength="12">
+            </div>
+            
+            <div class="btns-group">
+                <a href="#" class="btn btn-previous">Trở lại</a>
+                <a href="#" class="btn btn-next">Tiếp tục</a>
+            </div>
+        </div>
+
+        <div class="form-step">
+            <div class="input-group">
+                <label for="phone">Số điện thoại</label>
+                <input type="number" name="phone" id="phone" required maxlength="20">
+            </div>
+            <div class="input-group">
+                <label for="address">Địa chỉ</label>
+                <input type="text" name="address" id="address" required maxlength="255">
+            </div>
+            
+            <div class="btns-group">
+                <a href="#" class="btn btn-previous">Trở lại</a>
+                <a href="#" class="btn btn-next">Tiếp tục</a>
+            </div>
+        </div>
+
+        <div class="form-step">
+            <div class="input-group">
+                <label for="rest-name">Tên nhà hàng</label>
+                <input type="text" name="rest-name" id="rest-name" required maxlength="255">
+            </div>
+            <div class="input-group">
+                <label for="rest-address">Địa chỉ</label>
+                <input type="text" name="rest-address" id="rest-address" required>
+            </div>
+            <div class="input-group">
+                <label for="rest-phone">Số điện thoại</label>
+                <input type="number" name="rest-phone" id="rest-phone" required maxlength="20">
+            </div>
+            
+            <div class="btns-group">
+                <a href="#" class="btn btn-previous">Trở lại</a>
+                <a href="#" class="btn btn-next">Tiếp tục</a>
+            </div>
+        </div>
+
+        <div class="form-step">
+            <div class="input-group">
+                <label for="business-number">Số chứng nhận kinh doanh</label>
+                <input type="text" name="business-number" id="business-number" required maxlength="20">
+            </div>
+            <div class="input-group">
+                <label for="business-license">Giấy phép kinh doanh</label>
+                <input type="file" name="business-license" id="business-license" required>
+            </div>
+            <div class="input-group">
+                <label for="food-safty-cert">Chứng nhận vệ sinh an toàn</label>
+                <input type="file" name="food-safty-cert" id="food-safty-cert" required>
+            </div>
+            <div class="btns-group">
+                <a href="#" class="btn btn-previous">Trở lại</a>
+                <input type="submit" value="Đăng ký" class="btn">
+            </div>
+        </div>
+
+
+    </form>
+
+
+</body>
+</html>

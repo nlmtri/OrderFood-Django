@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Sửa thông tin món ăn {% endblock title %}
+
+{% block content %}
+
+<div style="min-height: 100vh;background-color: #F5F5F5;" class="w-100">
+    <div class="container pt-3" style="background-color: #FFFFFF;min-height: 100vh;">
+        <div class="d-flex align-items-center justify-content-between">
+            <div>
+                <h3 class="fs-3">Cập nhật món ăn</h3>
+                <h4 class="fs-5">Cần điền đầy đủ vào các trường dưới</h4>
+            </div>
+            <a href="{% url 'dish-admin-view' %}" class="nav-link">
+                <i class="fa-solid fa-arrow-left fs-5"></i>
+            </a>
+        </div>
+        
+        {% if messages %}
+
+        {% for message in messages %}
+        <div {% if message.tags %} class="alert-{{ message.tags }} alert alert-dismissible mt-1 mb-1"{% endif %} role="alert">
+            <div>{{ message }}</div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    
+        {% endif %}
+
+        <hr class="text-dark">
+        <form action="{% url 'post-edit-dish-admin-view' dish.id %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="d-flex align-items-start justify-content-between mb-3" style="gap: 1%;">
+            <div class="left-profile mt-3" style="width: 74%;">
+                
+                <div class="w-100 d-flex align-items-start justify-content-start mb-3" style="gap: 2%;">
+                    <div style="width: 24%;">
+                        <label for="" class="form-label w-100" style="text-align: right !important;">
+                            Tên món ăn
+                        </label>
+                    </div>
+                    <div style="width: 60%;">
+                        <input type="text" name="dish-name" class="form-control" style="border-radius: 0;" value="{{dish.name}}" required>
+                    </div>
+                </div>
+
+                <div class="w-100 d-flex align-items-start justify-content-start mb-3" style="gap: 2%;">
+                    <div style="width: 24%;">
+                        <label for="" class="form-label w-100" style="text-align: right !important;">
+                            Ảnh
+                        </label>
+                    </div>
+                    <div style="width: 60%;">
+                        <input type="file" value="{{dish.image.url}}" name="dish-image" class="form-control">
+                    </div>
+                </div>
+
+                <div class="w-100 d-flex align-items-center justify-content-start mb-3" style="gap: 2%;">
+                    <div style="width: 24%;">
+                        <label for="" class="form-label w-100" style="text-align: right !important;">
+                            Giá (VND)
+                        </label>
+                    </div>
+                    <div style="width: 60%;">
+                        <input type="number" min="1000" max="1000000" step="1000" name="price" class="form-control" style="border-radius: 0;" value="{{dish.price}}" required>
+                    </div>
+                </div>
+
+                <div class="w-100 d-flex align-items-center justify-content-start mb-3" style="gap: 2%;">
+                    <div style="width: 24%;">
+                        <label for="" class="form-label w-100" style="text-align: right !important;">
+                            Thực đơn
+                        </label>
+                    </div>
+                    <div style="width: 60%;">
+                        <select class="form-select w-50" name="menu" aria-label="Default select example" required>
+                            {% for menu in menus %}
+                            <option value="{{menu.id}}" {% if dish.menu.name == menu.name %}selected{% endif %}>{{menu.name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="w-100 d-flex align-items-start justify-content-start mb-3" style="gap: 2%;">
+                    <div style="width: 24%;">
+                        <label for="" class="form-label w-100" style="text-align: right !important;">
+                            Loại
+                        </label>
+                    </div>
+                    <div style="width: 60%;">
+                        <input type="text" name="dish-type" class="form-control" style="border-radius: 0;" value="{{dish.type}}" required>
+                    </div>
+                </div>
+
+                <div class="w-100 d-flex align-items-start justify-content-start mb-3" style="gap: 2%;">
+                    <div style="width: 24%;">
+                        <label for="" class="form-label w-100" style="text-align: right !important;">
+                            Mô tả
+                        </label>
+                    </div>
+                    <div style="width: 60%;">
+                        <textarea name="description" class="form-control" id="exampleFormControlTextarea1" rows="3" style="border-radius: 0;resize: none;" required>{{dish.description}}</textarea>
+                    </div>
+                </div>
+
+                <div class="w-100 d-flex align-items-start justify-content-start mb-3" style="gap: 2%;">
+                    <div style="width: 24%;">
+                        <label for="" class="form-label w-100" style="text-align: right !important;">
+                            Khoảng cách
+                        </label>
+                    </div>
+                    <div style="width: 60%;">
+                        <input type="number" min="0" max="999" step="0.01" name="distance" class="form-control w-25" style="border-radius: 0;" value="{{dish.distance}}" placeholder="km" required>
+                    </div>
+                </div>
+
+                <div class="w-100 d-flex align-items-center justify-content-start mb-3" style="gap: 2%;">
+                    <div style="width: 24%;visibility: hidden;">
+                    </div>
+                    <div style="width: 60%;">
+                        <button type="submit" class="btn btn-success" style="border-radius: 0;">Lưu thông tin</button>
+                    </div>
+                </div>
+            </div>
+            <div class="right-profile mt-3 d-flex flex-column align-items-center" style="width: 25%;">
+                <img class="w-75 h-75 rounded-circle" src="{{dish.image.url}}" alt="{{dish.name}}" title="{{dish.name}}">
+            </div>
+        </div>
+        </form>
+    </div>
+</div>
+
+{% endblock content %}

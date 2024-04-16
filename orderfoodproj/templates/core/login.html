@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Đăng nhập {% endblock title %}
+
+{% block content %}
+
+<div class="w-100 d-flex align-items-center justify-content-center" style="height: 100vh;background: linear-gradient(135deg, #dbbc0f, #079007);">
+    
+
+    <div class="w-50 p-5" style="background-color: #fff;">
+
+        {% if messages %}
+
+        {% for message in messages %}
+        <div {% if message.tags %} class="alert-{{ message.tags }} alert alert-dismissible mt-1 mb-1"{% endif %} role="alert">
+            <div>{{ message }}</div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    
+        {% endif %}
+
+        <h3 class="text-center text-uppercase fw-bold">Đăng nhập</h3>
+        <p class="text-center fs-5 mb-3">Đăng nhập để truy cập vào giỏ hàng hoặc nhà hàng của bạn!</p>
+        <form class="w-75 m-auto" method="POST" action="{% url 'post-login-view' %}">
+            {% csrf_token %}
+            <div class="mb-3 mt-2">
+              <input name="email" type="email" style="border-radius: 0;height: 60px;background-color: #BED7DC;font-size: 20px;" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="abc@gmail.com">
+            </div>
+            <div class="mb-3 mt-2">
+              <input name="password" type="password" style="border-radius: 0;height: 60px;background-color: #BED7DC;font-size: 20px;" class="form-control" id="exampleInputPassword1" placeholder="password">
+            </div>
+            
+            <button type="submit" class="btn btn-primary w-100 p-2 text-uppercase" style="background-color: #b02e84;border-radius: 0;">Đăng nhập</button>
+        </form>
+        <p class="mt-5 fs-5 text-center mb-3">Bạn chưa có tài khoản? <a href="{% url 'register-view' %}" class="text-primary">Đăng ký</a></p>
+        <div class="w-100 d-flex align-items-center flex-column" style="gap: 1em;">
+            <button class="btn btn-success w-75" type="button">
+                Đăng nhập bằng Google <i class="fa-brands fa-google"></i>
+            </button>
+            <button class="btn btn-primary w-75" type="button">
+                Đăng nhập bằng Facebook <i class="fa-brands fa-facebook"></i>
+            </button>
+        </div>
+    </div>
+
+</div>
+
+{% endblock content %}

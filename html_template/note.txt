@@ -1,0 +1,2 @@
+tại index.html còn thiếu một button fixed ở giữa màn hình bên phải (điều hướng đến đăng ký nhà hàng)
+và navbar khi scroll xuống phải fixed cố định :) 

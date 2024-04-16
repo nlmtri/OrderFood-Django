@@ -1,0 +1,242 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load humanize %}
+
+{% block title %} Quản lý món ăn {% endblock title %}
+
+{% block content %}
+
+<div class="w-100 d-flex align-items-center justify-content-between" style="gap: 1%;">
+    <div style="width: 19%;min-height: 100vh;" class="bg-dark d-flex flex-column justify-content-between">
+        <div class="d-flex flex-column align-items-start">
+            <div style="width: 100%;" class="d-flex align-items-center justify-content-center">
+                <img class="p-3" src="{{request.user.provider.restaurant.logo.url}}" style="width: 150px;height: 150px;border-radius: 50%;object-fit: cover;object-position: center;" alt="logo">
+            </div>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link text-white fs-5" href="{% url 'restaurant-admin-view' %}">
+                        <i class="fa-solid fa-house" style="margin: 0 1rem;"></i>
+                        <span class="fs-5">Trang chủ</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a style="color: #ffc107;" class="nav-link fs-5" href="{% url 'dish-admin-view' %}">
+                        <i class="fa-solid fa-bowl-food" style="margin: 0 1rem;"></i>
+                        <span class="fs-5">Quản lý món ăn</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white fs-5" href="{% url 'order-admin-view' %}">
+                        <i class="fa-solid fa-cart-shopping" style="margin: 0 1rem;"></i>
+                        <span class="fs-5">Đơn đặt món</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white fs-5" href="{% url 'review-admin-view' %}">
+                        <i class="fa-solid fa-comment" style="margin: 0 1rem;"></i>
+                        <span class="fs-5">Đánh giá nhà hàng</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white fs-5" href="{% url 'report-admin-view' %}">
+                        <i class="fa-solid fa-chart-simple" style="margin: 0 1rem;"></i>
+                        <span class="fs-5">Báo cáo thống kê</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white fs-5" href="{% url 'revenues-admin-view' %}">
+                        <i class="fa-solid fa-money-bill" style="margin: 0 1rem;"></i>
+                        <span class="fs-5">Doanh thu</span>
+                    </a>
+                </li>
+                
+              </ul>
+        </div>
+        <div class="w-100 d-flex align-items-center justify-content-center p-3">
+            <a href="{% url 'logout-view' %}" class="p-3 border border-1 border-white d-flex align-items-center justify-content-center text-white" style="width: 50px;height: 50px;border-radius: 50%;text-decoration: none;">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </a>
+        </div>
+    </div>
+    <div style="width: 80%;min-height: 100vh;" class="p-2">
+        <div class="d-flex align-items-center justify-content-between" style="margin-top: 1rem;">
+            <p class="fs-5 mb-0">Quản lý món ăn</p>
+            <li class="nav-item dropdown" style="margin-left: 24px;padding-right: 48px;list-style: none;">
+                <a class="nav-link dropdown-toggle" style="min-width: 100px; text-align: right;" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    {{request.user.username}}
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{% url 'restaurant-profile-admin-view' request.user.provider.restaurant.slug %}">Nhà hàng</a></li>
+                    <li><a class="dropdown-item" href="#">Đơn hàng</a></li>
+                    <li><a class="dropdown-item" href="#">Ví</a></li>
+                    <li><a class="dropdown-item" href="#">Thông báo <span class="badge text-bg-secondary">4</span></a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#">Cài đặt</a></li>
+                    <li><a class="dropdown-item" href="{% url 'logout-view' %}">Đăng xuất</a></li>
+                </ul>
+            </li>
+        </div>
+        <hr style="width: 100%;margin: 1rem auto 0;" />
+
+        {% if messages %}
+
+        {% for message in messages %}
+        <div {% if message.tags %} class="alert-{{ message.tags }} alert alert-dismissible mt-1 mb-1"{% endif %} role="alert">
+            <div>{{ message }}</div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    
+        {% endif %}
+
+        <div class="w-100 p-3">
+            
+            <form action="">
+                <div class="row bg-info-subtle pt-2 fs-6 rounded-top">
+                    <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 col-xxl-3">
+                        <input type="text" name="q" class="form-control" id="input-search-device" placeholder="Nhập tên món ăn" required>
+                    </div>
+                    <div class="col-1 col-sm-2 col-md-1 col-lg-1 col-xl-1 col-xxl-1" style="width: max-content;">
+                        <button type="submit" class="btn btn-dark rounded">
+                            <i class="fa-brands fa-searchengin"></i>
+                            <span class='ms-1 fs-6'>Tìm kiếm</span>
+                        </button>
+                    </div>
+                    <!-- <div class="col-1 col-sm-2 col-md-1 col-lg-1 col-xl-1 col-xxl-1" style="width: max-content;">
+                        <button type="button" id="reset-search-device" class="btn btn-info rounded">
+                            <i class="fa-solid fa-arrow-rotate-right"></i>
+                            <span class='ms-1 fs-6'>Nhập lại</span>
+                        </button>
+                    </div> -->
+                </div>
+            </form>
+
+            <div class="row bg-info-subtle p-2 fs-6 rounded-bottom">
+                <div class="col-1 col-sm-2 col-md-1 col-lg-1 col-xl-1 col-xxl-1" style="width: max-content;">
+                    <a href="{% url 'add-dish-admin-view' %}" class="btn btn-success rounded">
+                        <i class="fa-solid fa-circle-plus"></i>
+                        <span class='ms-1 fs-6'>Tạo mới</span>
+                    </a>
+                </div>
+                <div class="col-1">
+                    
+                </div>
+                <div class="col-2">
+                    <select type="text" class="form-select form-select-sm" id="select-record-number">
+                        <option value="1">50 bản ghi</option>
+                        <option value="2">100 bản ghi</option>
+                        <option value="3">200 bản ghi</option>
+                        <option value="4">500 bản ghi</option>
+                        <option value="5">Tất cả bản ghi</option>
+                    </select>
+                </div>
+                <div class="col-1">
+                    <a href="" id="download-excel-data" class="btn btn-primary rounded" style="width: max-content;">
+                        <i class="fa-solid fa-download"></i>
+                        <span class='ms-1 fs-6'>Tải xuống</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="row bg-info-subtle rounded p-2 mt-2 fs-6" style="height: 70vh;">
+                <div class="col-12">
+                    <table class="table table-hover shadow">
+                        <thead>
+                            <tr>
+                                    {% for title in titles %}
+                                    <th class="bg-primary text-white text-center fw-semi" {% if forloop.first %}style="border-top-left-radius: 6px;"{% endif %} {% if forloop.last %}style="border-top-right-radius: 6px;"{% endif %} scope="col">
+                                        {{title}}
+                                    </th>
+                                    {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>     
+                                {% with start_number=start_number %}
+                                {% for item in items %}
+                                    {% if forloop.counter|divisibleby:2 %}
+                                    <tr class="fs-6 bg-info-subtle">
+                                        <td class="bg-info-subtle text-dark text-center fw-bold" scope="row">
+                                            {{forloop.counter|add:start_number}}
+                                        </td>
+                                        <td class="bg-info-subtle text-dark text-center">
+                                            {{item.name}}
+                                        </td>
+                                        <td class="bg-info-subtle text-dark text-center">
+                                            {{item.menu.name}}
+                                        </td>
+                                        <td class="bg-info-subtle text-dark text-center">
+                                            <img src="{{item.image.url}}" style="width: 100px;height: 100px;border-radius: 6px;object-fit: cover;object-position: center;" alt="">
+                                        </td>
+                                        <td class="bg-info-subtle text-dark text-center">
+                                            {{item.price|intcomma}}
+                                        </td>
+                                        
+                                        <td class="bg-info-subtle text-dark text-center">
+                                            <a class="btn btn-warning" href="{% url 'edit-dish-admin-view' item.id %}"><i class="fa-regular fa-pen-to-square"></i></a>
+                                            
+                                            <a class="btn btn-dark" href="{% url 'post-delete-dish-admin-view' item.id %}">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% else %}
+                                    <tr class="fs-6 bg-light">
+                                        <td class="bg-light text-dark text-center fw-bold" scope="row">
+                                            {{forloop.counter|add:start_number}}
+                                        </td>
+                                        <td class="bg-light text-dark text-center">
+                                            {{item.name}}
+                                        </td>
+                                        <td class="bg-light text-dark text-center">
+                                            {{item.menu.name}}
+                                        </td>
+                                        <td class="bg-light text-dark text-center">
+                                            <img src="{{item.image.url}}" style="width: 100px;height: 100px;border-radius: 6px;object-fit: cover;object-position: center;" alt="">
+                                        </td>
+                                        <td class="bg-light text-dark text-center">
+                                            {{item.price|intcomma}} đ
+                                        </td>
+                                        
+                                        <td class="bg-light text-dark text-center">
+                                            
+                                            <a class="btn btn-warning" href="{% url 'edit-dish-admin-view' item.id %}"><i class="fa-regular fa-pen-to-square"></i></a>
+                                            
+                                            <a class="btn btn-dark" href="{% url 'post-delete-dish-admin-view' item.id %}" >
+                                                <i class="fa-solid fa-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                {% endfor %}
+                                {% endwith %}
+                        </tbody>
+                    </table>
+                    
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center" style="margin-bottom: 0.5rem;">
+                            {% if items.has_previous %}
+                                <li class="page-item"><a class="page-link" href="?page=1">&laquo; First</a></li>
+                                <li class="page-item"><a class="page-link" href="?page={{ items.previous_page_number }}">Previous</a></li>
+                            {% endif %}
+            
+                            {% for num in page_range %}
+                                <li class="page-item {% if num == items.number %}active{% endif %}"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                            {% endfor %}
+                    
+                            {% if items.has_next %}
+                                <li class="page-item"><a class="page-link" href="?page={{ items.next_page_number }}">Next</a></li>
+                                <li class="page-item"><a class="page-link" href="?page={{ items.paginator.num_pages }}">Last &raquo;</a></li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                    
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+ 
+{% endblock content %}
+

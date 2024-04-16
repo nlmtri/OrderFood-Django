@@ -1,0 +1,17 @@
+User:
+View menu, dish, nhà hàng, thêm món ăn vào cart (CRUD),
+Đặt hàng, theo dõi thông tin đơn, Có thể hủy nếu phía nhà hàng chưa xác nhận
+Sau khi đặt và nhận thì có thể đánh giá review về nhà hàng, món ăn (CRUD)
+Tìm kiếm món ăn, nhà hàng 
+Chỉnh sửa profile 
+Có thể in bills (PDF), xem lại lịch sử 
+
+Đối với nhà hàng:
+đăng ký xác thực nhiều form (multi-form) và admin sẽ quản lý (duyệt nhà hàng)
+Sau khi duyệt xong thì vào trang quản lý
+Trang chủ: tổng quan: tổng đơn đặt hàng, số đơn hoàn thành, đơn hủy, biểu đồ doanh thu (7 ngày), danh sách đơn hàng gần đây
+Trang quản lý món ăn (CRUD - tìm kiếm)
+Trang quản lý đơn đặt (tiếp nhận, các trạng thái nhận, từ chối, xử lý)
+Trang review, xem review của các user về nhà hàng, món ăn 
+Trang báo cáo: báo cáo thống kê doanh thu, xuất excel 
+Trang doanh thu: tổng doanh thu 
