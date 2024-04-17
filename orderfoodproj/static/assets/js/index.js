@@ -39,7 +39,7 @@ modalBtns.forEach(modalBtn => modalBtn.addEventListener('click', () => {
                 <h5 class="card-title">${dish.name}</h5>
                 <p class="card-text">${dish.price} đ</p>
                 <div>
-                    <input type="number" class="form-control" min="1" max="100" step="1" />
+                    <input type="number" class="form-control" value="1" min="1" max="100" step="1" />
                 </div>
             </div>
         </div>
@@ -48,8 +48,12 @@ modalBtns.forEach(modalBtn => modalBtn.addEventListener('click', () => {
             <textarea style="resize: none;" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
         </div>
         `; // price ở trên có thể fix lấy từ button với data attribute
-        submitModalBtn.innerHTML = `Thêm +${dish.price} đ`
-    })
+        submitModalBtn.innerHTML = `<a href="/add-to-cart/${dataPk}/1" class="btn btn-success">Thêm +${dish.price} đ</a>`;
+        const qtyInput = document.querySelector('.form-control');
+        qtyInput.addEventListener('change', () => {
+            const qty = qtyInput.value;
+            submitModalBtn.innerHTML = `<a href="/add-to-cart/${dataPk}/${qty}" class="btn btn-success">Thêm +${dish.price * qty} đ</a>`;
+        });    })
     .catch(error => console.error(error));
 
 }));

@@ -23,84 +23,36 @@
     {% endif %}
     <div style="margin: 1rem 3em 0;gap: 1%;" class="d-flex">
         <div class="left pt-2" style="width: 74%;">
-            
             <h3 class="fs-2 fw-semibold">Danh sách món ăn</h3>
             <div class="w-100">
                 <hr class="divider" style="margin: 1rem 0 1rem;width: 100%;" />
-                <div class="row mt-1 p-2">
-                    <div class="col col-2">
-                        <img src="{% static 'assets/images/wine.jpg' %}" style="width: 150px;height: 150px;border-radius: 6px;object-fit: cover;object-position: center;" alt="wine">
-                    </div>
-                    <div class="col col-2 d-flex align-items-center">
-                        <p>Trà Ổi Hồng 700ML</p>
-                    </div>
-                    <div class="col col-1 d-flex align-items-center"">
-                        <input type="number" min="1" value="1" max="100" step="1" class="form-control">
-                    </div>
-                    <div class="col col-2 d-flex align-items-center"">
-                        <p>100,000 đ</p>
-                    </div>
-                    <div class="col col-4">
-                            <label for="exampleFormControlTextarea1" class="form-label">Ghi chú</label>
-                            <textarea style="resize: none;" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                    </div>
-                    <div class="col col-1 d-flex align-items-center"">
-                        <i class="fa-solid fa-trash fs-5"></i>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="w-100">
-                <hr class="divider" style="margin: 1rem 0 1rem;width: 100%;" />
-                <div class="row mt-1 p-2">
-                    <div class="col col-2">
-                        <img src="{% static 'assets/images/seafood.jpg' %}" style="width: 150px;height: 150px;border-radius: 6px;object-fit: cover;object-position: center;" alt="wine">
-                    </div>
-                    <div class="col col-2 d-flex align-items-center">
-                        <p>Ốc Hương Trang</p>
-                    </div>
-                    <div class="col col-1 d-flex align-items-center"">
-                        <input type="number" min="1" value="1" max="100" step="1" class="form-control">
-                    </div>
-                    <div class="col col-2 d-flex align-items-center"">
-                        <p>100,000 đ</p>
-                    </div>
-                    <div class="col col-4">
-                            <label for="exampleFormControlTextarea1" class="form-label">Ghi chú</label>
-                            <textarea style="resize: none;" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                    </div>
-                    <div class="col col-1 d-flex align-items-center"">
-                        <i class="fa-solid fa-trash fs-5"></i>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="w-100">
-                <hr class="divider" style="margin: 1rem 0 1rem;width: 100%;" />
-                <div class="row mt-1 p-2">
-                    <div class="col col-2">
-                        <img src="{% static 'assets/images/steak.jpg' %}" style="width: 150px;height: 150px;border-radius: 6px;object-fit: cover;object-position: center;" alt="wine">
-                    </div>
-                    <div class="col col-2 d-flex align-items-center">
-                        <p>Big Beef Burger</p>
-                    </div>
-                    <div class="col col-1 d-flex align-items-center"">
-                        <input type="number" min="1" value="1" max="100" step="1" class="form-control">
-                    </div>
-                    <div class="col col-2 d-flex align-items-center"">
-                        <p>100,000 đ</p>
-                    </div>
-                    <div class="col col-4">
-                            <label for="exampleFormControlTextarea1" class="form-label">Ghi chú</label>
-                            <textarea style="resize: none;" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                    </div>
-                    <div class="col col-1 d-flex align-items-center"">
-                        <i class="fa-solid fa-trash fs-5"></i>
-                    </div>
-                </div>
-
+                {% if cart_items %}
+                    {% for item in cart_items %}
+                        <div class="row mt-1 p-2">
+                            <div class="col col-2">
+                                <img src="{{ item.dish.image.url }}" style="width: 150px;height: 150px;border-radius: 6px;object-fit: cover;object-position: center;" alt="{{ item.dish.name }}">
+                            </div>
+                            <div class="col col-2 d-flex align-items-center">
+                                <p>{{ item.dish.name }}</p>
+                            </div>
+                            <div class="col col-1 d-flex align-items-center">
+                                <input type="number" min="1" value="{{ item.qty }}" max="100" step="1" class="form-control">
+                            </div>
+                            <div class="col col-2 d-flex align-items-center">
+                                <p>{{ item.dish.price }} đ</p>
+                            </div>
+                            <div class="col col-4">
+                                <label for="exampleFormControlTextarea1" class="form-label">Ghi chú</label>
+                                <textarea style="resize: none;" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                            </div>
+                            <div class="col col-1 d-flex align-items-center">
+                                <i class="fa-solid fa-trash fs-5"></i>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>Giỏ hàng của bạn trống.</p>
+                {% endif %}
             </div>
         </div>
         <div class="right pt-2" style="width: 25%;background-color: #DDDDDD;border-radius: 6px;">
