@@ -11,51 +11,6 @@
 
 {% block content %}
 
-<div class="container-fluid pt-5" style="background-color: #D9F2EE;">
-
-    <!-- Nav -->
-    <nav id="navbar" class="navbar navbar-expand-lg pt-2">
-        <div class="container-fluid">
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse d-sm-none" style="padding-left: 48px;" id="navbarSupportedContent">
-              <form class="search" action="{% url 'index' %}">
-                <input type="text" placeholder="Bạn muốn ăn gì?" name="q" value="{% if query != 'None' %}{{query}}{% endif %}">
-                <button class="search-btn">Tìm kiếm</button>
-              </form>
-          </div>
-
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <span class="cart-counter">4</span>
-              <a class="nav-link cart" href="#"><ion-icon name="cart-outline"></ion-icon></a>
-            </li>
-            
-            {% if request.user.is_authenticated %}
-            <li class="nav-item dropdown" style="margin-left: 24px;padding-right: 48px;">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                {{request.user.username}}
-              </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Đơn hàng</a></li>
-                <li><a class="dropdown-item" href="#">Ví</a></li>
-                <li><a class="dropdown-item" href="#">Thông báo <span class="badge text-bg-secondary">4</span></a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#">Cài đặt</a></li>
-                <li><a class="dropdown-item" href="{% url 'logout-view' %}">Đăng xuất</a></li>
-              </ul>
-            </li>
-            {% else %}
-            <li class="nav-item" style="padding-right: 48px;">
-                <a class="nav-link user" href="{% url 'get-login-view' %}"><ion-icon name="person-outline"></ion-icon></a>
-            </li>
-            {% endif %}
-
-          </ul>
-        </div>
-    </nav>
-
     <div style="margin: 1rem 3em 0;gap: 0 1.5rem;" class="d-flex align-items-center justify-content-start">
         <a href="{% url 'index' %}" class="nav-link fs-4">Trang chủ</a>
         <i class="fa-solid fa-chevron-right fs-6"></i>

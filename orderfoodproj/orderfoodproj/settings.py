@@ -145,14 +145,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 JAZZMIN_SETTINGS = {
     'site_title': 'Order Food',
     'site_header': "Order Food",
-    'site_brand': "HK2 Food Admin",
+    'site_brand': "FoodDeli Admin",
     'site_logo': "/logo.png",
     'login_logo': "/logo.png",
     'login_logo_dark': "/logo.png",
     'site_logo_classes': "img-circle img-thumbnail",
     'site_icon': "/favicon.ico",
     'welcome_sign': "Welcome to Admin Page",
-    'copyright': 'hacker2',
+    'copyright': 'FoodDeli',
 }
 
 AUTH_USER_MODEL = 'core.CustomUser'

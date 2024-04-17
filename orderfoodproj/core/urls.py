@@ -21,7 +21,7 @@ urlpatterns = [
     path('menu/<slug:slug>/', get_menu_detail_view, name='menu-detail-view'),
     path('restaurant/<slug:slug>/', get_restaurant_view, name='restaurant-detail-view'),
     path('cart/detail/', cart_detail_view, name='cart-detail-view'),
-    path('profile/', get_profile_view, name='get-profile-view'),
+    path('profile/', profile_view, name='profile_view'),
 
     # POST
     path('do-login/', post_login_view, name='post-login-view'),
