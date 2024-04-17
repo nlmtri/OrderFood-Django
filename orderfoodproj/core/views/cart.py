@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse 
 from django.contrib.auth.decorators import login_required
 
+from core.models.cart import Cart
+
 # POST: /add-to-cart/ 
 def add_to_cart_api(request):
     # tại trang chủ add bằng json response vào card và cập nhật :)
