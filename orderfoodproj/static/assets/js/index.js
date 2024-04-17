@@ -30,9 +30,7 @@ modalBtns.forEach(modalBtn => modalBtn.addEventListener('click', () => {
     .then(data => {
         // console.log(data.bundle);
         let dish = data.bundle.dish;
-        let topings = data.bundle.topings;
         // console.log(dish);
-        // console.log(topings);
         modalTitle.innerHTML = `${dish.name}`;
         modalBody.innerHTML = `
         <div class="d-flex" style="width: max-content;gap: 1.5rem;">
@@ -49,19 +47,6 @@ modalBtns.forEach(modalBtn => modalBtn.addEventListener('click', () => {
             <label for="exampleFormControlTextarea1" class="form-label">Ghi chú</label>
             <textarea style="resize: none;" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
         </div>
-        ${topings.length > 0 ? `
-        <div class="mb-1 mt-2">
-            <label for="" class="form-label">Thêm</label>
-        </div>
-        ${topings.map(toping => `
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="${toping.price}" id="toping_${toping.name.replace(' ', '_')}">
-            <label class="form-check-label" for="toping_${toping.name.replace(' ', '_')}">
-                ${toping.name} +${toping.price} đ
-            </label>
-        </div>
-        `).join('')}
-        ` : '<p>Không có toping.</p>'}
         `; // price ở trên có thể fix lấy từ button với data attribute
         submitModalBtn.innerHTML = `Thêm +${dish.price} đ`
     })

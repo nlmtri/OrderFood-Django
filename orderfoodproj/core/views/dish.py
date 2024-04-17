@@ -4,7 +4,6 @@ from django.http import JsonResponse
 from django.contrib import messages 
 
 from core.models.dish import Dish
-from core.models.toping import Toping 
 from core.models.menu import Menu
 
 
@@ -19,14 +18,6 @@ def get_dish_data_api(request, pk):
             'bundle': {},
             'status': 404
         }, status=404)
-    topings = Toping.objects.filter(dish=dish)
-    data = []
-    for t in topings:
-        obj = {
-            'name': obj.name,
-            'price': obj.price
-        }
-        data.append(obj)
     return JsonResponse({
         'message': 'Lấy dữ liệu món ăn thành công!',
         'success': True,
@@ -35,8 +26,7 @@ def get_dish_data_api(request, pk):
                 'name': dish.name,
                 'price': dish.price,
                 'url': dish.image.url
-            },
-            'topings': data
+            }
         },
         'status': 200
     }, status=200)
