@@ -24,7 +24,7 @@ class Order(models.Model):
     status = models.CharField(default='Đang chờ xử lý', choices=ORDER_STATUS, max_length=31)
     delivery_address = models.TextField(default='')
     phone_number = models.CharField(max_length=20, default='')
-
+    created_at = models.DateTimeField(null=True, blank=True)
 
     @staticmethod 
     def get_order_by_user(user):
@@ -81,8 +81,6 @@ class OrderDish(models.Model):
     dish = models.ForeignKey(Dish, on_delete=models.DO_NOTHING, null=True, blank=True)
     quantity = models.IntegerField(default=1)
     note = models.TextField(null=True, blank=True)
-
-    created_at = models.DateTimeField(null=True, blank=True)
 
     @staticmethod
     def get_order_dish_by_order(order):

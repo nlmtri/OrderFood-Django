@@ -33,6 +33,9 @@ urlpatterns = [
     path('add-to-cart/', add_to_cart, name='add_to_cart'),
     path('update-cart/<int:item_id>/', update_cart, name='update_cart'),
     path('remove-from-cart/<int:item_id>/', remove_from_cart, name='remove_from_cart'),
+
+    #order feature
+    path('submit-order/', submit_order_view, name='submit_order'),
 ]
 
 # For Restaurant Admin
