@@ -7,7 +7,6 @@ from core.models.dish import Dish
 from core.models.menu import Menu 
 from core.models.order import * 
 from core.models.city import City  
-from core.models.review import Review 
 
 from django.utils import timezone 
 from datetime import datetime, timedelta
