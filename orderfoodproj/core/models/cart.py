@@ -10,7 +10,7 @@ class Cart(models.Model):
     dish = models.ForeignKey(Dish, on_delete=models.CASCADE, null=True, blank=True)
     qty = models.IntegerField(default=1)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True, blank=True)
-
+    note = models.TextField(null=True, blank=True)
     def get_cart_by_user(user):
         return Cart.objects.filter(customer=user)
 

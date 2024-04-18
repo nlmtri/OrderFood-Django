@@ -23,12 +23,15 @@ urlpatterns = [
     path('cart/detail/', cart_detail_view, name='cart-detail-view'),
     path('profile/', profile_view, name='profile_view'),
 
-    path('add-to-cart/<int:dish_id>/<int:qty>/', add_to_cart, name='add_to_cart'),
-
     # POST
     path('do-login/', post_login_view, name='post-login-view'),
     path('do-register/', post_register_view, name='post-register-view'),
     path('do-register-provider/', post_register_provider_view, name='post-register-provider-view'),
+
+    #Cart feature
+    path('add-to-cart/', add_to_cart, name='add_to_cart'),
+    path('update-cart/<int:item_id>/', update_cart, name='update_cart'),
+    path('remove-from-cart/<int:item_id>/', remove_from_cart, name='remove_from_cart'),
 ]
 
 # For Restaurant Admin
