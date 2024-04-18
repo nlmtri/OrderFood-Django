@@ -6,6 +6,7 @@ from django.http import HttpResponse, JsonResponse
 from core.models.order import OrderDish 
 from core.models.user import * 
 from core.models.cart import *
+from collections import defaultdict
 
 def order_view(request):
     pass 
@@ -13,11 +14,16 @@ def order_view(request):
 
 def place_order_view(request):
     user = Customer.objects.get(admin=request.user)
-    cart_items = Cart.objects.filter(customer=user).select_related('dish')
+    cart_items = Cart.objects.filter(customer=user).select_related('dish', 'dish__restaurant')
+    items_by_restaurant = defaultdict(list)
+    
+    for item in cart_items:
+        items_by_restaurant[item.dish.restaurant.name].append(item)
+    
     total_price = sum(item.qty * item.dish.price for item in cart_items)
-
+    
     context = {
-        'cart_items': cart_items,
+        'items_by_restaurant': dict(items_by_restaurant),
         'total_price': total_price,
     }
     return render(request, 'core/place-order.html', context)
