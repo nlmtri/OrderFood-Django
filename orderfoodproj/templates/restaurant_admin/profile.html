@@ -1,42 +1,15 @@
-{% extends 'base.html' %}
+{% extends 'base-admin.html' %}
+
 {% load static %}
 
 {% block title %} Hồ sơ nhà hàng {% endblock title %}
 
 {% block content %}
 
-<div style="min-height: 100vh;background-color: #F5F5F5;" class="w-100">
-    <div class="container pt-3" style="background-color: #FFFFFF;min-height: 100vh;">
-        <div class="d-flex align-items-center justify-content-between">
-            <div>
-                <h3 class="fs-3">Thông tin nhà hàng</h3>
-                <h4 class="fs-5">Cần cập nhật đầy đủ thông tin về nhà hàng</h4>
-            </div>
-            <a href="{% url 'restaurant-admin-view' %}" class="nav-link">
-                <i class="fa-solid fa-house fs-5"></i>
-            </a>
-        </div>
+
         
-        {% if messages %}
-
-        {% for message in messages %}
-        <div {% if message.tags %} class="alert-{{ message.tags }} alert alert-dismissible mt-1 mb-1"{% endif %} role="alert">
-            <div>{{ message }}</div>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        {% endfor %}
-    
-        {% endif %}
-
-        <hr class="text-dark">
         <form action="{% url 'save-restaurant-admin-profile-view' restaurant.slug %}" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        <div class="w-100 p-2" style="border-radius: 6px;">
-            <img src="{{restaurant.banner.url}}" alt="Banner" style="width: 100%;height: 500px;object-fit: cover;object-position: center;">
-            <div class="w-25">
-                <input type="file" name="banner" class="form-control mt-3">
-            </div>
-        </div>
         <div class="d-flex align-items-start justify-content-between mb-3" style="gap: 1%;">
             <div class="left-profile mt-3" style="width: 74%;">
                 
@@ -106,7 +79,5 @@
             </div>
         </div>
         </form>
-    </div>
-</div>
 
 {% endblock content %}

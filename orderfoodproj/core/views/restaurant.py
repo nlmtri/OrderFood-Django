@@ -5,7 +5,7 @@ from django.http import HttpResponse, JsonResponse
 from core.models.restaurant import Restaurant 
 from core.models.dish import Dish 
 from core.models.menu import Menu 
-from core.models.order import OrderDish 
+from core.models.order import * 
 from core.models.city import City  
 from core.models.review import Review 
 
@@ -50,9 +50,9 @@ def get_restaurant_admin_view(request):
     if request.user.user_type == '2':
         if request.user.provider.restaurant.is_active:
             restaurant = request.user.provider.restaurant
-            total_order, orders = OrderDish.get_total_order_of_restaurant_every_day(restaurant)
-            total_completed_order, total_price = OrderDish.get_total_order_of_restaurant_completed_every_day(restaurant=restaurant)
-            total_cancel_order = OrderDish.get_total_order_cancel(restaurant)
+            total_order, orders = Order.get_total_order_of_restaurant_every_day(restaurant)
+            total_completed_order, total_price = Order.get_total_order_of_restaurant_completed_every_day(restaurant=restaurant)
+            total_cancel_order = Order.get_total_order_cancel(restaurant)
 
             titles = ["STT", "Thời gian", "Trạng thái", "Giá"]
             items_per_page = 8
@@ -98,7 +98,7 @@ def get_7_day_statistic_api(request):
             for single_date in (start_date + timedelta(n) for n in range(days)):
                 day_start = datetime(single_date.year, single_date.month, single_date.day, 0, 0, 0, tzinfo=timezone.get_current_timezone())
                 day_end = datetime(single_date.year, single_date.month, single_date.day, 23, 59, 59, tzinfo=timezone.get_current_timezone())
-                total_revenue = OrderDish.objects.filter(
+                total_revenue = Order.objects.filter(
                     restaurant=restaurant,
                     created_at__range=(day_start, day_end),
                     status="Hoàn thành"
@@ -191,28 +191,12 @@ def get_dish_admin_view(request):
     if request.user.user_type == '2':
         if request.user.provider.restaurant.is_active:
             restaurant = request.user.provider.restaurant
+
+            titles = ["ID", "Tên món ăn", "Thực đơn", "Ảnh", "Giá", "Thao tác"]
             dishes = Dish.objects.filter(restaurant=restaurant).order_by('-id')
-
-            titles = ["STT", "Tên món ăn", "Thực đơn", "Ảnh", "Giá", "Thao tác"]
-
-            items_per_page = 3
-            p = Paginator(dishes, items_per_page)
-            page = request.GET.get('page')
-            items = p.get_page(page)
-            current = items.number
-            start = max(current - 2, 1)
-            end = min(current + 2, items.paginator.num_pages)
-            page_range = range(start, end)
-            start_number = (current - 1) * items_per_page
-
             return render(request, 'restaurant_admin/dish.html', {
                 'titles': titles,
-                'restaurant': restaurant,
-                'items': items, 
-                'start': start, 
-                'end': end, 
-                'page_range': page_range,
-                'start_number': start_number,
+                'dishes': dishes,
                 'restaurant': restaurant
             }, status=200)
         else:
@@ -227,68 +211,19 @@ def get_order_admin_view(request):
     if request.user.user_type == '2':
         if request.user.provider.restaurant.is_active:
             restaurant = request.user.provider.restaurant
-            titles = ["STT", "Món ăn", "Số lượng", "Tổng tiền", "Thời gian", "Trạng thái", "Thao tác"]
-            orders = OrderDish.objects.filter(restaurant=restaurant).order_by('-created_at')
-
-            items_per_page = 7
-            p = Paginator(orders, items_per_page)
-            page = request.GET.get('page')
-            items = p.get_page(page)
-            current = items.number
-            start = max(current - 2, 1)
-            end = min(current + 2, items.paginator.num_pages)
-            page_range = range(start, end)
-            start_number = (current - 1) * items_per_page
+            titles = ["STT", "Địa chỉ", "SĐT", "Tổng tiền", "Thời gian", "Trạng thái", "Thao tác"]
+            orders = Order.objects.filter(restaurant=restaurant).order_by('-created_at')
 
             return render(request, 'restaurant_admin/order.html', {
                 'titles': titles,
-                'items': items, 
-                'start': start, 
-                'end': end, 
-                'page_range': page_range,
-                'start_number': start_number,
-                'restaurant': restaurant
-                
-            }, status=200)
-        else:
-            return HttpResponse("<h1>Sau khi được duyệt nhà hàng có thể truy cập vào trang quản lý</h1><h3>Quá trình chờ duyệt trong 24h</h3>")
-    else:
-        return render(request, 'handle_error/403.html') 
-
-
-# GET: /restaurant-admin/review/
-@login_required(login_url='/login/')
-def get_review_admin_view(request):
-    if request.user.user_type == '2':
-        if request.user.provider.restaurant.is_active:
-            restaurant = request.user.provider.restaurant
-            dishes = Dish.get_dishes_by_restaurant(restaurant)
-
-            titles = ["STT", "Tên tài khoản", "Đánh giá", "Món ăn", "Trạng thái"]
-
-            items_per_page = 6
-            p = Paginator(dishes, items_per_page)
-            page = request.GET.get('page')
-            items = p.get_page(page)
-            current = items.number
-            start = max(current - 2, 1)
-            end = min(current + 2, items.paginator.num_pages)
-            page_range = range(start, end)
-            start_number = (current - 1) * items_per_page
-
-            return render(request, 'restaurant_admin/review.html', {
-                'titles': titles,
-                'items': items, 
-                'start': start, 
-                'end': end, 
-                'page_range': page_range,
-                'start_number': start_number,
+                'orders': orders,
                 'restaurant': restaurant
             }, status=200)
         else:
             return HttpResponse("<h1>Sau khi được duyệt nhà hàng có thể truy cập vào trang quản lý</h1><h3>Quá trình chờ duyệt trong 24h</h3>")
     else:
         return render(request, 'handle_error/403.html')
+
 
 
 # GET: /restaurant-admin/report/
