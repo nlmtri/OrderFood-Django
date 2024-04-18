@@ -23,6 +23,7 @@ urlpatterns = [
     path('cart/detail/', cart_detail_view, name='cart-detail-view'),
     path('profile/', profile_view, name='profile_view'),
 
+    path('place-order/', place_order_view, name='place_order'),
     # POST
     path('do-login/', post_login_view, name='post-login-view'),
     path('do-register/', post_register_view, name='post-register-view'),

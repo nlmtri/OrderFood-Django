@@ -4,14 +4,23 @@ from django.contrib import messages
 from django.http import HttpResponse, JsonResponse
 
 from core.models.order import OrderDish 
-
+from core.models.user import * 
+from core.models.cart import *
 
 def order_view(request):
     pass 
 
 
-def checkout_view(request):
-    pass 
+def place_order_view(request):
+    user = Customer.objects.get(admin=request.user)
+    cart_items = Cart.objects.filter(customer=user).select_related('dish')
+    total_price = sum(item.qty * item.dish.price for item in cart_items)
+
+    context = {
+        'cart_items': cart_items,
+        'total_price': total_price,
+    }
+    return render(request, 'core/place-order.html', context)
 
 
 def tracking_order_view(request):
