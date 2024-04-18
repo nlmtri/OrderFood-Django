@@ -4,7 +4,6 @@ from .views.login import *
 from .views.register import *
 from .views.menu import * 
 from .views.restaurant import * 
-from .views.review import * 
 from .views.cart import * 
 from .views.dish import *
 from .views.profile import * 
@@ -46,7 +45,6 @@ urlpatterns += [
     path('restaurant-admin/add-dish/', get_add_dish_admin_view, name='add-dish-admin-view'),
     path('restaurant-admin/edit-dish/<pk>/', get_edit_dish_admin_view, name='edit-dish-admin-view'),
     path('restaurant-admin/order/', get_order_admin_view, name='order-admin-view'),
-    path('restaurant-admin/review/', get_review_admin_view, name='review-admin-view'),
     path('restaurant-admin/report/', get_report_admin_view, name='report-admin-view'),
     path('restaurant-admin/revenues/', get_revenues_admin_view, name='revenues-admin-view'),
     path('restaurant-admin/profile/<slug:slug>/',get_edit_profile_restaurant_view, name='restaurant-profile-admin-view'),
