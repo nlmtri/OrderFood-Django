@@ -55,7 +55,7 @@ class Order(models.Model):
         total_price = 0 
         if completed_orders.exists():
             for item in completed_orders:
-                total_price += item.price
+                total_price += item.total_price
         return [total_order, total_price]
 
     @staticmethod

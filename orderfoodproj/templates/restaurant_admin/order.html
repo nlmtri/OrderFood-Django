@@ -43,7 +43,23 @@
                                 <td class="text-center">{{ order.phone_number }}</td>
                                 <td class="text-center">{{ order.total_price|intcomma }} đ</td>
                                 <td class="text-center">{{ order.created_at|date:"d-m-Y H:i" }}</td>
-                                <td class="text-center">{{ order.status }}</td>
+                                <td class="text-center">
+                                    <form class="d-flex align-items-center" style="gap: 0 0.8rem;" action="{% url 'post-update-order-admin-view' order.id %}" method="POST">
+                                        {% csrf_token %}
+                                        <div class="w-75">
+                                            <select class="form-select" name="order-status" aria-label="Default select example">
+                                                <option value="Đang chờ xử lý" {% if order.status == "Đang chờ xử lý" %}selected{% endif %}>Đang chờ xử lý</option>
+                                                <option value="Đã tiếp nhận" {% if order.status == "Đã tiếp nhận" %}selected{% endif %}>Đã tiếp nhận</option>
+                                                <option value="Đang giao" {% if order.status == "Đang giao" %}selected{% endif %}>Đang giao</option>
+                                                <option value="Hoàn thành" {% if order.status == "Hoàn thành" %}selected{% endif %}>Hoàn thành</option>
+                                                <option value="Đã hủy" {% if order.status == "Đã hủy" %}selected{% endif %}>Đã hủy</option>
+                                            </select>
+                                        </div>
+                                        <button type="submit" class="btn btn-success">
+                                            <i class="fa-solid fa-floppy-disk"></i>
+                                        </button>
+                                    </form>
+                                </td>
                                 <td class="text-center">
                                     <button class="btn btn-warning modal-btn" data-pk="{{ order.id }}">Chi tiết</button>
                                 </td>
@@ -61,66 +77,73 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const modalBtns = [...document.querySelectorAll('.modal-btn')];
-        const overlayElem = document.querySelector('.overlay');
-        const modalElem = document.querySelector('.modal');
-        const modalBody = document.getElementById('modal-body');
-        const modalTitle = document.getElementById('modal-title')
-        const submitModalBtn = document.getElementById('submit-modal');
+document.addEventListener('DOMContentLoaded', () => {
+    const modalBtns = [...document.querySelectorAll('.modal-btn')];
+    const overlayElem = document.querySelector('.overlay');
+    const modalElem = document.querySelector('.modal');
+    const modalBody = document.getElementById('modal-body');
+    const modalTitle = document.getElementById('modal-title');
+    const submitModalBtn = document.getElementById('submit-modal');
 
-        overlayElem.addEventListener('click', () => {
+    overlayElem.addEventListener('click', () => {
+        overlayElem.style.display = 'none';
+        modalElem.classList.remove('show-modal');
+    });
+
+    modalBtns.forEach(modalBtn => modalBtn.addEventListener('click', () => {
+        const closeModalBtn = document.querySelector('.btn-close');
+
+        overlayElem.style.display = 'block';
+        modalElem.classList.add('show-modal');
+
+        closeModalBtn.addEventListener('click', () => {
             overlayElem.style.display = 'none';
             modalElem.classList.remove('show-modal');
         });
 
-        modalBtns.forEach(modalBtn => modalBtn.addEventListener('click', () => {
-            
-            const closeModalBtn = document.querySelector('.btn-close');
-
-            overlayElem.style.display = 'block';
-            modalElem.classList.add('show-modal');
-
-            closeModalBtn.addEventListener('click', () => {
+        const dataPk = modalBtn.getAttribute('data-pk');
+        fetch(`/restaurant-admin/order/${dataPk}/`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                let bundle = data.bundle;
+                modalTitle.innerHTML = `Đơn hàng #${dataPk} - Thông tin chi tiết`;
+                modalBody.innerHTML = `
+                    <h4 class="text-center fs-4">Thông tin khách hàng</h4>
+                    <p><b>User:</b> ${bundle.user_order}</p>
+                    <p><b>Giao đến:</b> ${bundle.address}</p>
+                    <p><b>Số điện thoại:</b> ${bundle.phone}</p>
+                    <p><b>Thời gian đặt:</b> ${bundle.time}</p>
+                    <hr>
+                    <h4 class="text-center fs-4">Các món ăn</h4>
+                    <ul>
+                        ${bundle.dishes.map(dish => `
+                            <li class="d-flex align-items-center justify-content-start" style="gap: 0.5rem; margin-bottom: 10px;">
+                                <img src="${dish.image_url}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
+                                <div>
+                                    <p><b>Món ăn:</b> ${dish.dish}</p>
+                                    <p><b>Số lượng:</b> ${dish.quantity}</p>
+                                    <p><b>Giá:</b> ${dish.price}</p>
+                                    <p><b>Ghi chú:</b> ${dish.note || 'Không có'}</p>
+                                </div>
+                            </li>
+                        `).join('')}
+                    </ul>
+                `;
+                submitModalBtn.innerHTML = `Đóng`;
+            } else {
                 overlayElem.style.display = 'none';
                 modalElem.classList.remove('show-modal');
-            });
+            }
+        })
+        .catch(error => {
+            console.error(error);
+            overlayElem.style.display = 'none';
+            modalElem.classList.remove('show-modal');
+        });
+    }));
+});
 
-            const dataPk = modalBtn.getAttribute('data-pk');
-            fetch(`/restaurant-admin/order/${dataPk}/`)
-            .then(response => {
-                return response.json();
-            })
-            .then(data => { 
-                if (data.success) {
-                    // console.log(data.bundle);
-                    let bundle = data.bundle;
-                    
-                    modalTitle.innerHTML = `Đơn đặt hàng món ăn ${bundle.dish}`;
-                    modalBody.innerHTML = `
-                    <h4 class="text-center fs-4">Thông tin order</h4>
-                    <ul>
-                        <li class="d-flex align-items-center justify-content-start" style="gap: 0 1rem;"><b>User: </b> <p style="margin-bottom: 0;">${bundle.user_order}</p></li>
-                        <li class="d-flex align-items-center justify-content-start" style="gap: 0 1rem;"><b>Giao đến:</b> <p style="margin-bottom: 0;">${bundle.address}</p></li>
-                        <li class="d-flex align-items-center justify-content-start" style="gap: 0 1rem;"><b>Số điện thoại:</b> <p style="margin-bottom: 0;">${bundle.phone}</p></li>
-                        <li class="d-flex align-items-center justify-content-start" style="gap: 0 1rem;"><b>Món ăn:</b> <p style="margin-bottom: 0;">${bundle.dish}</p></li>
-                        <li class="d-flex align-items-center justify-content-start" style="gap: 0 1rem;"><b>Số lượng:</b> <p style="margin-bottom: 0;">${bundle.quantity}</p></li>
-                        <li class="d-flex align-items-center justify-content-start" style="gap: 0 1rem;"><b>Mô tả:</b> <p style="margin-bottom: 0;">${bundle.dish_description}</p></li>
-                        <li class="d-flex align-items-center justify-content-start" style="gap: 0 1rem;"><b>Giá:</b> <p style="margin-bottom: 0;">${bundle.price}</p></li>
-                        <li class="d-flex align-items-center justify-content-start" style="gap: 0 1rem;"><b>Ghi chú:</b> <p style="margin-bottom: 0;">${bundle.note}</p></li>
-                        <li class="d-flex align-items-center justify-content-start" style="gap: 0 1rem;"><b>Thời gian đặt:</b> <p style="margin-bottom: 0;">${bundle.time}</p></li>
-                    </ul>
-                    `; // price ở trên có thể fix lấy từ button với data attribute
-                    submitModalBtn.innerHTML = `Xong`;
-                } else {
-                    overlayElem.style.display = 'none';
-                    modalElem.classList.remove('show-modal');
-                }
-            })
-            .catch(error => console.error(error));
-
-        }));
-    });
 </script>
  
 {% endblock content %}

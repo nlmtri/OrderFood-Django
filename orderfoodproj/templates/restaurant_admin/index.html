@@ -51,43 +51,22 @@
                         </tr>
                     </thead>
                     <tbody>
-                                {% with start_number=start_number %}
-                                {% for item in items %}
-                                    {% if forloop.counter|divisibleby:2 %}
+                                {% for order in orders %}
                                     <tr class="fs-6 bg-info-subtle">
                                         <th class="bg-info-subtle text-dark text-center fw-semi" scope="row">
-                                            {{forloop.counter|add:start_number}}
+                                            {{order.id}}
                                         </th>
                                         <td class="bg-info-subtle text-dark text-center">
-                                            {{item.created_at.day}}-{{item.created_at.month}}-{{item.created_at.year}}
+                                            {{ order.created_at|date:"d-m-Y H:i" }}
                                         </td>
                                         <td class="bg-info-subtle text-dark text-center">
-                                            {{item.status}}
+                                            {{order.status}}
                                         </td>
                                         <td class="bg-info-subtle text-dark text-center">
-                                            {{item.price|intcomma}} đ
+                                            {{order.total_price|intcomma}} đ
                                         </td>
                                     </tr>
-                                    {% else %}
-                                    <tr class="fs-6 bg-light">
-                                        <th class="bg-light text-dark text-center fw-semi" scope="row">
-                                            {{forloop.counter|add:start_number}}
-                                        </th>
-                                        <td class="bg-light text-dark text-center">
-                                            {{item.created_at.day}}-{{item.created_at.month}}-{{item.created_at.year}}
-
-                                            <!-- {{item.created_at.hour}}:{{item.created_at.minute}}:{{item.created_at.second}} -->
-                                        </td>
-                                        <td class="bg-light text-dark text-center">
-                                            {{item.status}}
-                                        </td>
-                                        <td class="bg-light text-dark text-center">
-                                            {{item.price|intcomma}} đ
-                                        </td>
-                                    </tr>
-                                    {% endif %}
                                 {% endfor %}
-                                {% endwith %}
                                 
                             
                     </tbody>

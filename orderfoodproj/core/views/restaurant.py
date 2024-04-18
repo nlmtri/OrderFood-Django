@@ -54,15 +54,7 @@ def get_restaurant_admin_view(request):
             total_cancel_order = Order.get_total_order_cancel(restaurant)
 
             titles = ["STT", "Thời gian", "Trạng thái", "Giá"]
-            items_per_page = 8
-            p = Paginator(orders, items_per_page)
-            page = request.GET.get('page')
-            items = p.get_page(page)
-            current = items.number
-            start = max(current - 2, 1)
-            end = min(current + 2, items.paginator.num_pages)
-            page_range = range(start, end)
-            start_number = (current - 1) * items_per_page
+
 
             return render(request, 'restaurant_admin/index.html', {
                 'total_order': total_order,
@@ -70,11 +62,7 @@ def get_restaurant_admin_view(request):
                 'total_cancel_order': total_cancel_order,
                 'total_price': total_price,
                 'titles': titles,
-                'items': items, 
-                'start': start, 
-                'end': end, 
-                'page_range': page_range,
-                'start_number': start_number,
+                'orders': orders, 
                 'restaurant': restaurant
             }, status=200)
         else:
@@ -83,53 +71,6 @@ def get_restaurant_admin_view(request):
         return render(request, 'handle_error/403.html')
 
     
-# GET: /restaurant-admin/7-day-statistic/
-@login_required(login_url='/login/')
-def get_7_day_statistic_api(request):
-    if request.user.user_type == '2':
-        if request.user.provider.restaurant.is_active:
-            restaurant = request.user.provider.restaurant
-            days = 7
-            end_date =  timezone.now().date() - timedelta(days=1) 
-            start_date = end_date - timedelta(days=days-1)
-            fdays = []
-            revenues = []
-            for single_date in (start_date + timedelta(n) for n in range(days)):
-                day_start = datetime(single_date.year, single_date.month, single_date.day, 0, 0, 0, tzinfo=timezone.get_current_timezone())
-                day_end = datetime(single_date.year, single_date.month, single_date.day, 23, 59, 59, tzinfo=timezone.get_current_timezone())
-                total_revenue = Order.objects.filter(
-                    restaurant=restaurant,
-                    created_at__range=(day_start, day_end),
-                    status="Hoàn thành"
-                ).aggregate(total=Sum('price'))['total'] or 0 
-                # aggregation: tổng hợp: tóm tắt tổng hợp các đối tượng
-                revenues.append(total_revenue)
-                fdays.append(f"{single_date.day}-{single_date.month}-{single_date.year}")
-            # print(revenues)
-            # print(fdays)
-            return JsonResponse({
-                'success': True,
-                'message': "Lấy dữ liệu thống kê thành công!",
-                'bundle': {
-                    'revenues': revenues,
-                    'days': fdays,
-                },
-                'status': 200
-            }, status=200)
-        else:
-            return JsonResponse({
-                'success': False,
-                'message': 'Chờ duyệt trong 24h',
-                'bundle': {},
-                'status': 403
-            }, status=403)
-    else:
-        return JsonResponse({
-            'success': False,
-            'message': "Permission not allowed",
-            'bundle': {},
-            'status': 403
-        }, status=403) 
     
 
 # GET: /restaurant-admin/profile/xoi-chu-ngong/

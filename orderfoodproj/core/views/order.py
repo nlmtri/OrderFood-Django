@@ -89,12 +89,12 @@ def post_update_order_admin_view(request, pk):
             if request.method == 'POST':
 
                 try:
-                    order_dish = OrderDish.objects.get(pk=pk)
-                except OrderDish.DoesNotExist:
+                    order = Order.objects.get(pk=pk)
+                except Order.DoesNotExist:
                     messages.info(request, "Đơn đặt món không tồn tại!")
                     return redirect('order-admin-view')
-                order_dish.status = request.POST.get('order-status')
-                order_dish.save()
+                order.status = request.POST.get('order-status')
+                order.save()
                 messages.info(request, "Cập nhật tình trạng đơn thành công!!")
                 return redirect('order-admin-view')
 
@@ -107,12 +107,13 @@ def post_update_order_admin_view(request, pk):
 
     
 # GET: /restaurant-admin/order/5/
+@login_required
 def get_detail_order_admin_api(request, pk):
     if request.user.user_type == '2':
         if request.user.provider.restaurant.is_active:
             try:
-                order_dish = OrderDish.objects.get(pk=pk)
-            except OrderDish.DoesNotExist:
+                order = Order.objects.get(pk=pk, restaurant=request.user.provider.restaurant)
+            except Order.DoesNotExist:
                 return JsonResponse({
                     'success': False,
                     'message': 'Không tìm thấy đơn đặt hàng!',
@@ -120,35 +121,33 @@ def get_detail_order_admin_api(request, pk):
                     'status': 404,
                 }, status=404)
 
+            # Get related OrderDish items
+            order_dishes = OrderDish.objects.filter(order=order)
+            dishes_details = []
+            for order_dish in order_dishes:
+                dishes_details.append({
+                    'dish': order_dish.dish.name,
+                    'image_url': order_dish.dish.image.url,
+                    'dish_description': order_dish.dish.description,
+                    'price': order_dish.dish.price,
+                    'quantity': order_dish.quantity,
+                    'note': order_dish.note,
+                })
+
             return JsonResponse({
                 'success': True, 
                 'message': "Lấy dữ liệu thành công!!",
                 'bundle': {
-                    "user_order": order_dish.order.customer.admin.username,
-                    'address': order_dish.delivery_address,
-                    'phone': order_dish.phone_number,
-                    'dish': order_dish.dish.name,
-                    'image_url': order_dish.dish.image.url,
-                    'dish_description': order_dish.dish.description,
-                    'price': order_dish.price,
-                    'quantity': order_dish.quantity, 
-                    'note': order_dish.note,
-                    'time': order_dish.created_at,
+                    "user_order": order.customer.admin.username,
+                    'address': order.delivery_address,
+                    'phone': order.phone_number,
+                    'dishes': dishes_details,
+                    'time': order.created_at.strftime("%Y-%m-%d %H:%M:%S")
                 }, 
                 'status': 200
             }, status=200)
 
         else:
-            return JsonResponse({
-                'success': False,
-                'message': 'Vui lòng chờ duyệt trong 24h',
-                'bundle': {},
-                'status': 403,
-            }, status=403)
+            return HttpResponse("<h1>Sau khi được duyệt nhà hàng có thể truy cập vào trang quản lý</h1><h3>Quá trình chờ duyệt trong 24h</h3>")
     else:
-        return JsonResponse({
-            'success': False,
-            'message': 'Permission Error',
-            'bundle': {},
-            'status': 403
-        }, status=403)
+        return render(request, 'handle_error/403.html')

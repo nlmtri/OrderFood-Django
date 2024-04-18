@@ -108,6 +108,16 @@
                     </ul>
                 </li>
             </div>
+            {% if messages %}
+
+            {% for message in messages %}
+            <div {% if message.tags %} class="alert-{{ message.tags }} alert alert-dismissible mt-1 mb-1"{% endif %} role="alert">
+                <div>{{ message }}</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        
+            {% endif %}
 
     {% block content %}
 

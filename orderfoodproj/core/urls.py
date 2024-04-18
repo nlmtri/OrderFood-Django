@@ -57,7 +57,6 @@ urlpatterns += [
     path('restaurant-admin/update-order/<pk>/', post_update_order_admin_view, name='post-update-order-admin-view'),
 
     # API
-    path('restaurant-admin/7-day-statistic/', get_7_day_statistic_api, name='7-day-statistic-api'),
     path('restaurant-admin/order/<pk>/', get_detail_order_admin_api, name='detail-order-admin-api'),
     
 
