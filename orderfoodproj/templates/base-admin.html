@@ -70,12 +70,6 @@
                             <span class="fs-5">Đơn đặt món</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white fs-5" href="{% url 'report-admin-view' %}">
-                            <i class="fa-solid fa-chart-simple" style="margin: 0 1rem;"></i>
-                            <span class="fs-5">Báo cáo thống kê</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link text-white fs-5" href="{% url 'restaurant-profile-admin-view' request.user.provider.restaurant.slug %}">
                             <i class="fa-solid fa-gear" style="margin: 0 1rem;"></i>
                             <span class="fs-5">Cài đặt nhà hàng</span>
@@ -98,12 +92,10 @@
                         {{request.user.username}}
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{% url 'restaurant-profile-admin-view' request.user.provider.restaurant.slug %}">Nhà hàng</a></li>
-                        <li><a class="dropdown-item" href="#">Đơn hàng</a></li>
-                        <li><a class="dropdown-item" href="#">Ví</a></li>
-                        <li><a class="dropdown-item" href="#">Thông báo <span class="badge text-bg-secondary">4</span></a></li>
+                        <li><a class="dropdown-item" href="{% url 'dish-admin-view' %}">Món ăn</a></li>
+                        <li><a class="dropdown-item" href="{% url 'order-admin-view' %}">Đơn hàng</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#">Cài đặt</a></li>
+                        <li><a class="dropdown-item" href="{% url 'restaurant-profile-admin-view' request.user.provider.restaurant.slug %}">Cài đặt</a></li>
                         <li><a class="dropdown-item" href="{% url 'logout-view' %}">Đăng xuất</a></li>
                     </ul>
                 </li>
