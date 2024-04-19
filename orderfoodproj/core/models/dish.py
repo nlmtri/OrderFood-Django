@@ -18,15 +18,12 @@ class Dish(models.Model):
     name = models.CharField(max_length=255)
     image = models.ImageField(upload_to='items/')
     price = models.IntegerField(default=0)
-    old_price = models.IntegerField(default=0)
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, null=True, blank=True)
     menu = models.ForeignKey(Menu, on_delete=models.DO_NOTHING, null=True, blank=True)
 
     product_status = models.CharField(choices=STATUS, max_length=10, default='published')
     type = models.CharField(max_length=255, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
-    featured = models.BooleanField(default=False)
-    distance = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(null=True, blank=True)

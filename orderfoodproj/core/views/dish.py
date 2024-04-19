@@ -67,7 +67,6 @@ def post_add_dish_admin_view(request):
                         menu=menu,
                         type=request.POST.get('dish-type'),
                         description=request.POST.get('description'),
-                        distance = request.POST.get('distance')
                     )
                     dish.save()
                     messages.info(request, "Thêm món ăn thành công!")

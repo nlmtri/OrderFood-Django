@@ -71,22 +71,10 @@ def post_register_provider_view(request):
         email = request.POST.get('email') 
         password = request.POST.get('password')
 
-        # Provider
-        fullname = request.POST['fullname'] 
-        date_of_birth = request.POST['dob']
-        ID_card = request.POST['id_card']
-        
-        address = request.POST.get('address') 
-        phone = request.POST.get('phone')
-
-        business_number = request.POST.get('business-number') 
-        business_license = request.FILES['business-license'] 
-        food_safty_cert = request.FILES['food-safty-cert']
-
         # Restaurant
         rest_name = request.POST['rest-name']
         rest_address = request.POST['rest-address']
-        resst_phone = request.POST['rest-phone']
+        rest_phone = request.POST['rest-phone']
 
         # Xử lý logic tạo user
         UserModel = get_user_model()
@@ -106,38 +94,14 @@ def post_register_provider_view(request):
             messages.info(request, "Tên tài khoản đã tồn tại!")
             return redirect('register-provider-view')
 
-        # Provider
-        # Check ID Card
-        if Provider.objects.filter(ID_card=ID_card).exists():
-            messages.info(request, "Số CMND đã tồn tại!")
-            return redirect('register-provider-view')
-
-        if Provider.objects.filter(phone=phone).exists():
-            messages.info(request, "Số điện thoại chủ nhà hàng đã tồn tại!")
-            return redirect('register-provider-view')
-
-        if Provider.objects.filter(business_number=business_number).exists():
-            messages.info(request, "Số chứng nhận kinh doanh của nhà hàng đã tồn tại!")
-            return redirect('register-provider-view')
-
-        if Restaurant.objects.filter(phone_number=resst_phone).exists():
-            messages.info(request, "Số điện thoại của nhà hàng đã tồn tại!")
-            return redirect('register-provider-view')
         provider = user.provider
-        provider.fullname = fullname
-        provider.date_of_birth = date_of_birth
-        provider.ID_card = ID_card
-        provider.address = address
-        provider.phone = phone 
-        provider.business_number = business_number
-        provider.business_license = business_license
-        provider.food_safty_cert = food_safty_cert
+
 
         # Thêm slug cho restaurant tự động
         # Restaurant 
         restaurant = Restaurant.objects.create(
             name=rest_name,
-            phone_number=resst_phone,
+            phone_number=rest_phone,
             address=rest_address
         )
         # Các giá trị default của rest 
