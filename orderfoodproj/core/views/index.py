@@ -12,7 +12,7 @@ from core.models.menu import *
 def index(request):
     query = request.GET.get('q')
 
-    feature_list = list(Dish.objects.filter(featured=True))
+    feature_list = list(Dish.objects.all())
     random.shuffle(feature_list)
     feature_list = feature_list[:4]
 
