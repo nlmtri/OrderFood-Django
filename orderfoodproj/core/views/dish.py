@@ -25,6 +25,7 @@ def get_dish_data_api(request, pk):
             'dish': {
                 'name': dish.name,
                 'price': dish.price,
+                'description': dish.description,
                 'url': dish.image.url
             }
         },

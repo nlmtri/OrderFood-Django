@@ -3,7 +3,6 @@ const overlayElem = document.querySelector('.overlay');
 const modalElem = document.querySelector('.modal');
 const modalBody = document.getElementById('modal-body');
 const modalTitle = document.getElementById('modal-title')
-const submitModalBtn = document.getElementById('submit-modal');
 
 overlayElem.addEventListener('click', () => {
     overlayElem.style.display = 'none';
@@ -36,8 +35,9 @@ modalBtns.forEach(modalBtn => modalBtn.addEventListener('click', () => {
                 <div class="d-flex" style="width: max-content;gap: 1.5rem;">
                     <img src="${dish.url}" style="width: 150px;height: 150px;object-fit: cover;object-position: center;border-radius: 6px;" alt="${dish.name}">
                     <div class="card-body">
-                        <h5 class="card-title">${dish.name}</h5>
+                        <h5 class="modal-title text-wrap" id="modal-title">${dish.name}</h5>
                         <p class="card-text">${dish.price} đ</p>
+                        <p class="card-text">${dish.description}</p>
                         <div>
                             <input type="hidden" name="csrfmiddlewaretoken" value="${csrfToken}">
                             <input type="hidden" name="dish_id" value="${dataPk}">

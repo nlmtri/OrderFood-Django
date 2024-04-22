@@ -24,6 +24,7 @@
                 <div class="food-highlight-desc">
                     <h4>{{product.name|truncatechars:20}}</h4>
                     <p>{{product.price|intcomma}} đ</p>
+                    <button class="btn btn-success dish-modal" data-pk="{{product.id}}" style="border-radius: 50%;">+</button>
                 </div>
             </div>
             {% endfor %}

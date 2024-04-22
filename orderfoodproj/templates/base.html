@@ -39,7 +39,7 @@
                 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" id="submit-modal"></button>
+                <!-- <button type="button" class="btn btn-success" id="submit-modal"></button> ->-->
             </div>
         </div>
     </div>
@@ -66,7 +66,6 @@
 
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <span class="cart-counter">4</span>
               <a id="cart" class="nav-link cart" href="{% url 'cart-detail-view' %}"><ion-icon name="cart-outline"></ion-icon></a>
             </li>
             
@@ -78,8 +77,6 @@
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="{% url 'profile_view' %}">Tài khoản</a></li>
                 <li><a class="dropdown-item" href="#">Đơn hàng</a></li>
-                <li><a class="dropdown-item" href="#">Ví</a></li>
-                <li><a class="dropdown-item" href="#">Thông báo <span class="badge text-bg-secondary">4</span></a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="#">Cài đặt</a></li>
                 <li><a class="dropdown-item" href="{% url 'logout-view' %}">Đăng xuất</a></li>

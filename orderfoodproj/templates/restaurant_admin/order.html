@@ -44,22 +44,28 @@
                                 <td class="text-center">{{ order.total_price|intcomma }} đ</td>
                                 <td class="text-center">{{ order.created_at|date:"d-m-Y H:i" }}</td>
                                 <td class="text-center">
-                                    <form class="d-flex align-items-center" style="gap: 0 0.8rem;" action="{% url 'post-update-order-admin-view' order.id %}" method="POST">
-                                        {% csrf_token %}
-                                        <div class="w-75">
-                                            <select class="form-select" name="order-status" aria-label="Default select example">
-                                                <option value="Đang chờ xử lý" {% if order.status == "Đang chờ xử lý" %}selected{% endif %}>Đang chờ xử lý</option>
-                                                <option value="Đã tiếp nhận" {% if order.status == "Đã tiếp nhận" %}selected{% endif %}>Đã tiếp nhận</option>
-                                                <option value="Đang giao" {% if order.status == "Đang giao" %}selected{% endif %}>Đang giao</option>
-                                                <option value="Hoàn thành" {% if order.status == "Hoàn thành" %}selected{% endif %}>Hoàn thành</option>
-                                                <option value="Đã hủy" {% if order.status == "Đã hủy" %}selected{% endif %}>Đã hủy</option>
-                                            </select>
-                                        </div>
-                                        <button type="submit" class="btn btn-success">
-                                            <i class="fa-solid fa-floppy-disk"></i>
-                                        </button>
-                                    </form>
+                                    {% if order.status != "Đã hủy" and order.status != "Hoàn thành" %}
+                                        <form class="d-flex align-items-center" style="gap: 0 0.8rem;" action="{% url 'post-update-order-admin-view' order.id %}" method="POST">
+                                            {% csrf_token %}
+                                            <div class="w-75">
+                                                <select class="form-select" name="order-status" aria-label="Default select example">
+                                                    <option value="Đang chờ xử lý" {% if order.status == "Đang chờ xử lý" %}selected{% endif %}>Đang chờ xử lý</option>
+                                                    <option value="Đã tiếp nhận" {% if order.status == "Đã tiếp nhận" %}selected{% endif %}>Đã tiếp nhận</option>
+                                                    <option value="Đang giao" {% if order.status == "Đang giao" %}selected{% endif %}>Đang giao</option>
+                                                    <option value="Hoàn thành" {% if order.status == "Hoàn thành" %}selected{% endif %}>Hoàn thành</option>
+                                                    <option value="Đã hủy" {% if order.status == "Đã hủy" %}selected{% endif %}>Đã hủy</option>
+                                                </select>
+                                            </div>
+                                            <button type="submit" class="btn btn-success">
+                                                <i class="fa-solid fa-floppy-disk"></i>
+                                            </button>
+                                        </form>
+                                    {% else %}
+                                        <!-- Optionally display the status as text if the form is not shown -->
+                                        <p>{{ order.status }}</p>
+                                    {% endif %}
                                 </td>
+                                
                                 <td class="text-center">
                                     <button class="btn btn-warning modal-btn" data-pk="{{ order.id }}">Chi tiết</button>
                                 </td>
