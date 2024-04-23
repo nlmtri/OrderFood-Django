@@ -1,0 +1,140 @@
+{% extends 'base-admin.html' %}
+
+{% load static %}
+
+{% block title %} Đánh giá món ăn {% endblock title %}
+
+{% block content %}
+
+        <hr style="width: 100%;margin: 1rem auto 0;" />
+
+        {% if messages %}
+
+        {% for message in messages %}
+        <div {% if message.tags %} class="alert-{{ message.tags }} alert alert-dismissible mt-1 mb-1"{% endif %} role="alert">
+            <div>{{ message }}</div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    
+        {% endif %}
+
+        <div class="w-100 p-3">
+            <div class="row bg-info-subtle rounded p-2 mt-2 fs-6" style="height: 75vh;">
+                <div class="col-12">
+                    <table class="table table-hover shadow">
+                        <thead>
+                            <tr>
+                                {% for title in titles %}
+                                    <th class="bg-primary text-white text-center fw-semi" {% if forloop.first %}style="border-top-left-radius: 6px;"{% endif %} {% if forloop.last %}style="border-top-right-radius: 6px;"{% endif %} scope="col">
+                                        {{title}}
+                                    </th>
+                                {% endfor %}
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for review in reviews %}
+                                <tr class="fs-6 bg-info-subtle">
+                                    <th class="bg-info-subtle text-dark text-center fw-semi" scope="row">
+                                        {{review.id}}
+                                    </th>
+                                    <td class="bg-info-subtle text-dark text-center">
+                                        {{review.user.admin.username}}
+                                    </td>
+                                    <td class="bg-info-subtle text-dark text-center">
+                                        {% for i in "12345" %}
+                                        <span class="fa fa-star" style="cursor:pointer; color:orange"></span>
+                                        {% endfor %}
+                                    </td>
+                                    <td class="bg-info-subtle text-dark text-center">
+                                        {{review.dish.name|truncatechars:25}}
+                                    </td>    
+                                    <td class="bg-info-subtle text-dark text-center">
+
+                                        <a class="btn btn-warning" data-pk="{{ review.id }}">Chi tiết</a>
+                                        
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                                  
+                        </tbody>
+                    </table>
+
+                    
+            
+                    
+                </div>
+            </div>
+
+
+        </div>
+        
+    </div>
+</div>
+ 
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const modalBtns = [...document.querySelectorAll('.btn-warning')];
+        const overlayElem = document.querySelector('.overlay');
+        const modalElem = document.querySelector('.modal');
+        const modalBody = document.getElementById('modal-body');
+        const modalTitle = document.getElementById('modal-title');
+        const submitModalBtn = document.getElementById('submit-modal');
+        const closeModalBtns = [...document.querySelectorAll('.btn-close'), submitModalBtn];  // Include submitModalBtn as a close button
+    
+        // Function to close modal
+        function closeModal() {
+            overlayElem.style.display = 'none';
+            modalElem.classList.remove('show-modal');
+        }
+    
+        // Event listeners for closing modal
+        closeModalBtns.forEach(btn => {
+            btn.addEventListener('click', closeModal);
+        });
+    
+        // Add click event to overlay to close modal
+        overlayElem.addEventListener('click', closeModal);
+    
+        // Prevent modal content click from propagating to overlay
+        modalElem.addEventListener('click', event => event.stopPropagation());
+    
+        modalBtns.forEach(modalBtn => modalBtn.addEventListener('click', () => {
+            const dataPk = modalBtn.getAttribute('data-pk');
+    
+            overlayElem.style.display = 'block';
+            modalElem.classList.add('show-modal');
+    
+            fetch(`/restaurant-admin/review/${dataPk}/`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    let review = data.bundle;
+                    modalTitle.innerHTML = `Review chi tiết - Dish: ${review.dish.name}`;
+                    modalBody.innerHTML = `
+                        <div class="review-details">
+                            <img src="${review.dish.image_url}" alt="${review.dish.name}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 5px;">
+                            <p></p>
+                            <p><strong>Dish:</strong> ${review.dish.name}</p>
+                            <p><strong>Price:</strong> ${review.dish.price}</p>
+                            <p><strong>Rating:</strong> ${'<span class="fa fa-star" style="color:orange;"></span>'.repeat(review.rating)}</p>
+                            <p><strong>Review:</strong> ${review.text}</p>
+                        </div>
+                    `;
+                    submitModalBtn.innerHTML = 'Đóng';
+                } else {
+                    closeModal();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                closeModal();
+            });
+        }));
+    });
+    </script>
+    
+    
+
+{% endblock content %}

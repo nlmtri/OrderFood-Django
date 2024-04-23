@@ -7,6 +7,7 @@ from core.models.dish import Dish
 from core.models.menu import Menu 
 from core.models.order import * 
 from core.models.city import City  
+from core.models.review import *  
 
 from django.utils import timezone 
 from datetime import datetime, timedelta
@@ -42,7 +43,44 @@ def get_restaurant_view(request, slug):
         'menu_dict': menu_dict
     }, status=200)
 
+@login_required(login_url='/login/')
+def get_review_admin_view(request):
+    if request.user.user_type == '2':
+        if request.user.provider.restaurant.is_active:
+            restaurant = request.user.provider.restaurant
+            dishes = Dish.get_dishes_by_restaurant(restaurant)
+            reviews = Review.objects.filter(dish__in=dishes)
 
+            titles = ["STT", "Tên tài khoản", "Đánh giá", "Món ăn", "Trạng thái"]
+
+            return render(request, 'restaurant_admin/review.html', {
+                'titles': titles,
+                'reviews': reviews, 
+                'restaurant': restaurant
+            }, status=200)
+        else:
+            return HttpResponse("<h1>Sau khi được duyệt nhà hàng có thể truy cập vào trang quản lý</h1><h3>Quá trình chờ duyệt trong 24h</h3>")
+    else:
+        return render(request, 'handle_error/403.html')
+
+@login_required(login_url='/login/')
+def fetch_review_details(request, review_id):
+    if request.user.user_type == '2':
+        review = Review.objects.get(id=review_id)  # Assuming the user is linked via admin attribute
+        return JsonResponse({
+            'success': True,
+            'bundle': {
+                'dish': {
+                    'name': review.dish.name,
+                    'image_url': review.dish.image.url if review.dish.image else '',
+                    'price': review.dish.price,
+                },
+                'rating': review.rating,
+                'text': review.review,
+            }
+        })
+    else:
+        return render(request, 'handle_error/403.html')
 # GET: /restaurant-admin/ 
 @login_required(login_url='/login/')
 def get_restaurant_admin_view(request):

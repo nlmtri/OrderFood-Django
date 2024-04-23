@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Order History{% endblock %}
+{% block custom_css_javascript %}
+<style>
+    .star-rating {
+        line-height:32px;
+        font-size:1.25em;
+    }
+
+    .star-rating .fa-star { color: gray; }
+
+    .star-rating .fa-star.checked { color: orange; }
+</style>
+<script>
+function setRating(element, rating) {
+    const stars = element.parentNode.querySelectorAll('.fa-star');
+    stars.forEach(star => {
+        star.classList.remove('checked');
+    });
+    stars.forEach((star, index) => {
+        if (index < rating) {
+            star.classList.add('checked');
+        }
+    });
+    element.parentNode.nextElementSibling.value = rating; // Assuming the hidden input is right next to the star container
+}
+
+</script>
+    
+{% endblock %}
+{% block content %}
+<div class="container">
+    <h1>Order History</h1>
+    {% if orders %}
+        {% for order in orders %}
+        <div class="card mb-4">
+            <div class="card-header">
+                Order #{{ order.id }} - Placed on {{ order.created_at|date:"M d, Y" }}
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Delivery Address: {{ order.delivery_address }}</h5>
+                <p class="card-text">Phone Number: {{ order.phone_number }}</p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Dish</th>
+                            <th>Quantity</th>
+                            <th>Price per item</th>
+                            <th>Total Price</th>
+                            <th>Review</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for dish in order.dishes %}
+                        <tr>
+                            <td>{{ dish.name }}</td>
+                            <td>{{ dish.quantity }}</td>
+                            <td>{{ dish.price_per_item|intcomma }} đ</td>
+                            <td>{{ dish.total_price_per_dish|intcomma }} đ</td>
+                            <td>
+                                <form method="post" action="{% url 'order_history' %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="dish_id" value="{{ dish.id }}">
+                                    <textarea class="form-control" name="review" rows="2" cols="40" placeholder="Type your review here...">{{ dish.existing_review.review|default:'' }}</textarea>
+                                    <br>
+                                    <div class="star-rating">
+                                        {% for _ in "12345" %}
+                                        <span class="fa fa-star {% if dish.existing_review and forloop.counter <= dish.existing_review.rating %}checked{% endif %}" onclick="setRating(this, '{{ forloop.counter }}')" style="cursor:pointer;"></span>
+                                        {% endfor %}
+                                    </div>
+                                    <input type="hidden" name="rating" value="{{ dish.existing_review.rating|default:0 }}">
+                                    <button type="submit" class="btn btn-primary">Submit Review</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <p class="text-right"><strong>Total Order Price: {{ order.total_price|intcomma }} đ</strong></p>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>No orders found.</p>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.star-rating').forEach(container => {
+            const currentRating = parseInt(container.nextElementSibling.value);
+            const stars = container.querySelectorAll('.fa-star');
+            stars.forEach((star, index) => {
+                star.classList.toggle('checked', index < currentRating);
+            });
+            stars.forEach(star => {
+                star.onclick = () => {
+                    const rating = star.dataset.rating;
+                    container.nextElementSibling.value = rating;
+                    stars.forEach((s, idx) => {
+                        s.classList.toggle('checked', idx < rating);
+                    });
+                };
+            });
+        });
+    });
+    </script>
+{% endblock %}

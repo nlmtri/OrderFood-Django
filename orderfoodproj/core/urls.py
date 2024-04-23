@@ -35,6 +35,7 @@ urlpatterns = [
 
     #order feature
     path('submit-order/', submit_order_view, name='submit_order'),
+    path('orders/', order_history_view, name='order_history'),
 ]
 
 # For Restaurant Admin
@@ -46,7 +47,9 @@ urlpatterns += [
     path('restaurant-admin/edit-dish/<pk>/', get_edit_dish_admin_view, name='edit-dish-admin-view'),
     path('restaurant-admin/order/', get_order_admin_view, name='order-admin-view'),
     path('restaurant-admin/profile/<slug:slug>/',get_edit_profile_restaurant_view, name='restaurant-profile-admin-view'),
-
+    path('restaurant-admin/review/', get_review_admin_view, name='review-admin-view'),
+    path('restaurant-admin/review/<int:review_id>/', fetch_review_details, name='fetch_review_details'),
+    
     # POST
     path('restaurant-admin/profile/save/<slug:slug>/', post_save_profile_restaurant_admin_view, name='save-restaurant-admin-profile-view'),
     path('restaurant-admin/add-dish/save/', post_add_dish_admin_view, name='post-add-dish-admin-view'),
