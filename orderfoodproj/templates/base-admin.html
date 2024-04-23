@@ -70,6 +70,11 @@
                             <span class="fs-5">Đơn đặt món</span></a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link text-white fs-5" href="{% url 'review-admin-view' %}">
+                            <i class="fa-solid fa-cart-shopping" style="margin: 0 1rem;"></i>
+                            <span class="fs-5">Review</span></a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link text-white fs-5" href="{% url 'restaurant-profile-admin-view' request.user.provider.restaurant.slug %}">
                             <i class="fa-solid fa-gear" style="margin: 0 1rem;"></i>
                             <span class="fs-5">Cài đặt nhà hàng</span>
