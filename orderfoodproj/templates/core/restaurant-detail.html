@@ -24,7 +24,7 @@
         <div style="width: max-content;">
             <h3 class="fs-1">{{restaurant.name}}</h3>
             <p class="card-text d-flex align-items-center justify-content-between w-50">
-                <span>⭐ 4.2</span>
+                <span>⭐ {{ dish.avg_rating|default:"No ratings yet" }}</span>
                 <span>🕔 20 phút</span>
                 <span>2.2 km</span>
             </p>

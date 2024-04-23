@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect 
 from django.core.paginator import Paginator 
 from django.contrib import messages 
+from django.db.models import Q, Avg
 
 from core.models.menu import * 
 from core.models.dish import * 
@@ -14,8 +15,8 @@ def get_menu_detail_view(request, slug):
     except Menu.DoesNotExist:
         messages.info(request, f"Không tìm thấy menu với slug = {slug}")
         return redirect('index')
-    dishes = Dish.objects.filter(menu=menu).order_by('name')
-    items_per_page = 10 
+    dishes = Dish.objects.annotate(avg_rating=Avg('review__rating')).filter(menu=menu).order_by('name')
+    items_per_page = 9
     p = Paginator(dishes, items_per_page)
     page = request.GET.get('page')
     items = p.get_page(page)

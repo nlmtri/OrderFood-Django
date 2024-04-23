@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect 
 from django.core.paginator import Paginator
-from django.db.models import Q
+from django.db.models import Q, Avg
 
 import random
 
@@ -17,7 +17,7 @@ def index(request):
     feature_list = feature_list[:4]
 
     categories = Menu.get_menu_by_quantity()
-    dishes = Dish.objects.all().order_by('name')
+    dishes = Dish.objects.annotate(avg_rating=Avg('review__rating')).order_by('name')
 
     if query is not None:
         dishes = Dish.objects.filter(
@@ -31,7 +31,7 @@ def index(request):
     else:
         query = ''
 
-    items_per_page = 10
+    items_per_page = 18
     p = Paginator(dishes, items_per_page)
     page = request.GET.get('page')
     items = p.get_page(page)

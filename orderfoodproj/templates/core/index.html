@@ -80,7 +80,7 @@
                 <div class="card-body">
                   <h5 class="card-title">{{dish.name|truncatechars:20}}</h5>
                   <p class="card-text d-flex align-items-center justify-content-between">
-                    <span>⭐ 4.2</span>
+                    <span>⭐ {{ dish.avg_rating|default:"No ratings yet" }}</span>
                     <span>🕔 20 phút</span>
                   </p>
                   <p class="card-text">Giá: {{dish.price|intcomma}} đ</p>
