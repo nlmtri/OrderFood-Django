@@ -12,7 +12,6 @@ class CustomUser(AbstractUser):
     user_type_data = (
         (1, "customer"),
         (2, "provider"),
-        (3, "staff"),
     )
     user_type = models.CharField(default=1, choices=user_type_data, max_length=15)
 
@@ -36,18 +35,6 @@ class Customer(models.Model):
     
 
 class Provider(models.Model):
-    id = models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='id')
-    admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(null=True, blank=True)
-
-    restaurant = models.ForeignKey(Restaurant, on_delete=models.DO_NOTHING, null=True, blank=True)
-
-
-
-
-class Staff(models.Model):
-    '''Tài khoản nhân viên của nhà hàng'''
     id = models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='id')
     admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)

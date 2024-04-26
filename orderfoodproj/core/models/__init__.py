@@ -1,4 +1,4 @@
-from .user import CustomUser, Staff, Provider, Customer
+from .user import CustomUser, Provider, Customer
 from .city import City 
 from .dish import Dish 
 from .menu import Menu 
