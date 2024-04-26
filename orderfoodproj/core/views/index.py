@@ -16,7 +16,7 @@ def index(request):
     random.shuffle(feature_list)
     feature_list = feature_list[:4]
 
-    categories = Menu.get_menu_by_quantity()
+    categories = Menu.get_all_menu()
     dishes = Dish.objects.annotate(avg_rating=Avg('review__rating')).order_by('name')
 
     if query is not None:

@@ -9,7 +9,7 @@ from core.models.dish import *
 
 # GET: /menu/fast-food/
 def get_menu_detail_view(request, slug):
-    categories = Menu.get_menu_by_quantity()
+    categories = Menu.get_all_menu()
     try:
         menu = Menu.objects.get(slug=slug)
     except Menu.DoesNotExist:

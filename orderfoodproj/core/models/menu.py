@@ -17,9 +17,5 @@ class Menu(models.Model):
     def get_all_menu():
         return Menu.objects.all()
 
-    @staticmethod 
-    def get_menu_by_quantity(qty=7):
-        return Menu.objects.all().order_by('id')[:qty]
-
     def __str__(self):
         return f"ID: {self.id} - Name: {self.name}"
