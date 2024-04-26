@@ -87,8 +87,8 @@ def get_restaurant_admin_view(request):
     if request.user.user_type == '2':
         if request.user.provider.restaurant.is_active:
             restaurant = request.user.provider.restaurant
-            total_order, orders = Order.get_total_order_of_restaurant_every_day(restaurant)
-            total_completed_order, total_price = Order.get_total_order_of_restaurant_completed_every_day(restaurant=restaurant)
+            total_order, orders = Order.get_total_order_of_restaurant(restaurant)
+            total_completed_order, total_price = Order.get_total_order_of_restaurant_completed(restaurant=restaurant)
             total_cancel_order = Order.get_total_order_cancel(restaurant)
 
             titles = ["STT", "Thời gian", "Trạng thái", "Giá"]

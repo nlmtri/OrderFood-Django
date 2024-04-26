@@ -31,25 +31,19 @@ class Order(models.Model):
         return Order.objects.filter(customer=user)
     
     @staticmethod
-    def get_total_order_of_restaurant_every_day(restaurant):
+    def get_total_order_of_restaurant(restaurant):
         now = timezone.now()
-        start_of_today = datetime(now.year, now.month, now.day, 0, 0, 0, tzinfo=timezone.get_current_timezone())
         return [Order.objects.filter(
                 restaurant=restaurant,
-                created_at__gte=start_of_today
             ).count(), Order.objects.filter(
                 restaurant=restaurant,
-                created_at__gte=start_of_today
             ).order_by('-created_at')]
 
     @staticmethod
-    def get_total_order_of_restaurant_completed_every_day(restaurant):
-        now = timezone.now()
-        start_of_today = datetime(now.year, now.month, now.day, 0, 0, 0, tzinfo=timezone.get_current_timezone())
+    def get_total_order_of_restaurant_completed(restaurant):
         completed_orders = Order.objects.filter(
             restaurant=restaurant,
             status="Hoàn thành",
-            created_at__gte=start_of_today
         )
         total_order = completed_orders.count()
         total_price = 0 
@@ -60,12 +54,9 @@ class Order(models.Model):
 
     @staticmethod
     def get_total_order_cancel(restaurant):
-        now = timezone.now()
-        start_of_today = datetime(now.year, now.month, now.day, 0, 0, 0, tzinfo=timezone.get_current_timezone())
         total_cancel_orders = Order.objects.filter(
             restaurant=restaurant,
-            status="Đã hủy",
-            created_at__gte=start_of_today
+            status="Đã hủy"
         ).count()
         return total_cancel_orders
 
