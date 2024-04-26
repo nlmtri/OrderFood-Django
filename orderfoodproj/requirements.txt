@@ -6,3 +6,4 @@ typing_extensions==4.10.0
 tzdata==2024.1
 django-cors-headers
 django-jazzmin
+Pillow
