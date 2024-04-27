@@ -50,6 +50,7 @@ function setRating(element, rating) {
                             <th>Quantity</th>
                             <th>Price per item</th>
                             <th>Total Price</th>
+                            <th>Status</th>
                             <th>Review</th>
                         </tr>
                     </thead>
@@ -60,7 +61,9 @@ function setRating(element, rating) {
                             <td>{{ dish.quantity }}</td>
                             <td>{{ dish.price_per_item|intcomma }} đ</td>
                             <td>{{ dish.total_price_per_dish|intcomma }} đ</td>
+                            <td>{{ order.status }}</td>
                             <td>
+                                {% if order.status == "Hoàn thành" %}
                                 <form method="post" action="{% url 'order_history' %}">
                                     {% csrf_token %}
                                     <input type="hidden" name="dish_id" value="{{ dish.id }}">
@@ -74,6 +77,9 @@ function setRating(element, rating) {
                                     <input type="hidden" name="rating" value="{{ dish.existing_review.rating|default:0 }}">
                                     <button type="submit" class="btn btn-primary">Submit Review</button>
                                 </form>
+                                {% else %}
+                                Chưa thể review
+                                {% endif %}
                             </td>
                         </tr>
                         {% endfor %}

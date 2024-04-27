@@ -79,6 +79,7 @@ def order_history_view(request):
             'phone_number': order.phone_number,
             'created_at': order.created_at,
             'total_price': order.total_price,
+            'status': order.status,
             'dishes': detailed_dishes,
         })
 
