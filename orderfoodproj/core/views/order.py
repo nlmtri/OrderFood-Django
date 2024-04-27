@@ -120,10 +120,9 @@ def submit_order_view(request):
                     note=item.note,
                 )
 
-            # Optionally clear the cart items
-            # item.delete()  # Uncomment this line if you want to clear the cart after order
+            item.delete() 
 
-        return redirect('order_success')  # Redirect to an order success page or similar
+        return redirect('order_history')  # Redirect to an order success page or similar
 
     return redirect('place_order')  # Redirect back if not a POST request or fail
 
